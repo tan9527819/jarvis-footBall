@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#07111f">
+<title>JARVIS Football AI V4</title>
+<style>
+*{box-sizing:border-box}body{margin:0;background:#07111f;color:#edf4ff;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}.wrap{max-width:760px;margin:auto;padding:16px 13px 38px}
+header{padding:5px 3px 15px}.brand{font-size:24px;font-weight:800}.sub{font-size:12px;color:#8297b3;margin-top:4px}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.stat{background:#0d1929;border:1px solid #1d3049;border-radius:15px;padding:11px}.num{font-size:20px;font-weight:800}.label{font-size:10px;color:#8196b2}
+.tabs{display:flex;gap:7px;overflow:auto;margin:12px 0}.tab{border:1px solid #253b56;background:#0d1929;color:#b9c8da;border-radius:999px;padding:8px 13px;white-space:nowrap}.tab.on{background:#21436a;color:#fff}
+.card{background:#0d1929;border:1px solid #1d3049;border-radius:15px;padding:14px;margin:10px 0}.league{font-size:11px;color:#7e9ab8}.time{float:right;color:#9bb0c8;font-size:12px}.teams{font-size:16px;font-weight:750;margin:12px 0}.vs{color:#607894;margin:0 7px}.row{display:flex;justify-content:space-between;align-items:center;gap:7px}.badge{font-size:10px;padding:5px 7px;border-radius:8px;background:#18283d;color:#adc1d8}.risk{background:#4a351b;color:#ffd58e}.ok{background:#143428;color:#91dfba}
+button{border:0;border-radius:10px;background:#183653;color:#dcecff;padding:9px 12px;margin-top:9px;width:100%}.detail{display:none;border-top:1px solid #1c3048;margin-top:11px;padding-top:11px}.detail.open{display:block}.grid{display:grid;grid-template-columns:1fr 1fr;gap:7px}.box{background:#091421;border-radius:9px;padding:9px}.k{font-size:10px;color:#6f86a4}.v{font-size:13px;margin-top:3px}.gate{margin-top:9px;padding:10px;border-radius:10px;background:#2b2118;color:#e8c89e;font-size:12px;line-height:1.5}.empty{text-align:center;color:#8196b2;padding:42px 10px}.source{font-size:10px;color:#6f86a4;margin-top:8px}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header><div class="brand">⚽ JARVIS Football AI <span style="color:#65a9ff">V4</span></div><div class="sub">自动数据兼容 · 证据优先 · 风险门控</div></header>
+<div class="stats">
+<div class="stat"><div class="num" id="count">—</div><div class="label">今日比赛</div></div>
+<div class="stat"><div class="num" id="riskCount">—</div><div class="label">风险场次</div></div>
+<div class="stat"><div class="num" id="source">检测中</div><div class="label">数据来源</div></div>
+</div>
+<div class="tabs"><button class="tab on" data-f="all">全部</button><button class="tab" data-f="early">早场</button><button class="tab" data-f="risk">⚠️ 风险</button></div>
+<div id="matches"><div class="empty">正在自动寻找比赛数据…</div></div>
+<div class="source">系统会优先尝试真实数据；如果 today.json 不存在，则使用项目中的 sample.json 进行页面测试。</div>
+</div>
+<script>
+let games=[],sourceName="";
+const paths=[
+"data/api_football/today.json",
+"demo/data/api_football/today.json",
+"demo/data/samples/sample.json",
+"data/samples/sample.json",
+"samples/sample.json"
+];
+function nm(g,s){return g?.teams?.[s]?.name||g?.[s]?.name||g?.[s]||"未知球队"}
+function lg(g){return g?.league?.name||g?.league_name||"未知联赛"}
+function tm(g){let x=g?.fixture?.date||g?.date||g?.kickoff||g?.start_time;if(!x)return"时间待定";let d=new Date(x);return isNaN(d)?"时间待定":d.toLocaleTimeString("zh-CN",{hour:"2-digit",minute:"2-digit"})}
+function isRisk(g){return /risk|warning|anomaly|异动|风险|冷门/i.test(JSON.stringify(g))}
+function normalize(d){if(Array.isArray(d))return d;if(Array.isArray(d.response))return d.response;if(Array.isArray(d.matches))return d.matches;if(Array.isArray(d.fixtures))return d.fixtures;return []}
+async function findData(){
+ for(const p of paths){
+  try{const r=await fetch(p+"?t="+Date.now(),{cache:"no-store"});if(!r.ok)continue;const d=await r.json();const a=normalize(d);if(a.length||p.includes("sample")){games=a;sourceName=p;return true}}catch(e){}
+ }
+ return false
+}
+function render(f="all"){
+ let a=games.filter(g=>f==="all"||(f==="risk"&&isRisk(g))||(f==="early"&&parseInt(tm(g))<12));
+ const box=document.getElementById("matches");
+ if(!a.length){box.innerHTML='<div class="empty">暂无符合条件的比赛</div>';return}
+ box.innerHTML=a.map((g,i)=>{let r=isRisk(g),id="d"+i;return `<div class="card">
+ <span class="league">${lg(g)}</span><span class="time">${tm(g)}</span>
+ <div class="teams">${nm(g,"home")}<span class="vs">vs</span>${nm(g,"away")}</div>
+ <div class="row"><span class="badge ${r?"risk":"ok"}">${r?"⚠️ 数据风险":"✓ 已读取"}</span><span class="badge">${sourceName.includes("sample")?"测试数据":"实时数据"}</span></div>
+ <button onclick="openD('${id}',this)">查看证据分析</button>
+ <div class="detail" id="${id}">
+ <div class="grid">
+ <div class="box"><div class="k">胜/平/负</div><div class="v">— / — / —</div></div>
+ <div class="box"><div class="k">模型置信度</div><div class="v">不足</div></div>
+ <div class="box"><div class="k">欧赔初盘→即时</div><div class="v">待接入</div></div>
+ <div class="box"><div class="k">亚盘/大小球</div><div class="v">待接入</div></div>
+ <div class="box"><div class="k">CSV历史同赔</div><div class="v">待接入</div></div>
+ <div class="box"><div class="k">盘口异动</div><div class="v">待接入</div></div>
+ </div>
+ <div class="gate">Risk Gate：当前没有完整赔率与历史匹配证据，因此不虚构概率。结论：<b>暂不推荐</b>。</div>
+ </div></div>`}).join("")
+}
+function openD(id,b){let e=document.getElementById(id);e.classList.toggle("open");b.textContent=e.classList.contains("open")?"收起证据分析":"查看证据分析"}
+document.querySelectorAll(".tab").forEach(b=>b.onclick=()=>{document.querySelectorAll(".tab").forEach(x=>x.classList.remove("on"));b.classList.add("on");render(b.dataset.f)});
+(async()=>{const ok=await findData();if(!ok){document.getElementById("source").textContent="未找到";document.getElementById("matches").innerHTML='<div class="empty">没有找到可读取的比赛 JSON 文件。<br><br>下一步需要修复 GitHub Actions 数据路径。</div>';return}document.getElementById("count").textContent=games.length;document.getElementById("riskCount").textContent=games.filter(isRisk).length;document.getElementById("source").textContent=sourceName.includes("sample")?"sample":"实时";render()})();
+</script>
+</body>
+</html>
