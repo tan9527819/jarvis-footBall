@@ -5,63 +5,308 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Jarvis Football AI</title>
 <style>
-*{box-sizing:border-box}body{margin:0;background:#0b1020;color:#eef2ff;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
-header{padding:22px 18px;background:linear-gradient(135deg,#111a35,#18244b);position:sticky;top:0;z-index:2}
-h1{margin:0;font-size:25px}.sub{opacity:.65;font-size:13px;margin-top:5px}
-nav{display:flex;gap:8px;padding:12px 14px;overflow:auto;background:#0d1429}nav button{white-space:nowrap;border:0;border-radius:18px;padding:9px 14px;background:#1b2748;color:#dce6ff}nav button.active{background:#5b7cfa;color:#fff}
-main{padding:14px;max-width:900px;margin:auto}.card{background:#121a31;border:1px solid #253252;border-radius:16px;padding:16px;margin-bottom:12px}.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}.metric{background:#0e1529;border-radius:12px;padding:13px}.metric b{display:block;font-size:22px;margin-top:4px}.muted{color:#91a0c3;font-size:13px}.bar{height:8px;background:#27324d;border-radius:8px;overflow:hidden;margin-top:8px}.fill{height:100%;background:#6d8cff}.match{display:flex;justify-content:space-between;gap:10px;align-items:center}.teams{font-size:17px;font-weight:700}.badge{padding:6px 9px;border-radius:10px;background:#1d6b52;color:#a8f2d0;font-size:12px}.warn{background:#6b4c1d;color:#ffd999}.danger{background:#69283a;color:#ffc0cf}.btn{width:100%;padding:13px;border:0;border-radius:12px;background:#5b7cfa;color:white;font-size:15px;font-weight:700;margin-top:10px}.hidden{display:none}.small{font-size:12px}
+*{box-sizing:border-box}
+body{margin:0;background:#080d19;color:#eef3ff;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+header{padding:22px 16px;background:linear-gradient(135deg,#111d3a,#182b59)}
+h1{margin:0;font-size:25px}
+.sub{margin-top:5px;color:#91a3c8;font-size:13px}
+nav{display:flex;gap:8px;padding:10px;overflow-x:auto;background:#0c1324;position:sticky;top:0;z-index:5}
+nav button{border:0;border-radius:20px;padding:9px 14px;background:#17223b;color:#c9d5f2;white-space:nowrap}
+nav button.active{background:#5578ff;color:white}
+main{max-width:900px;margin:auto;padding:14px}
+section{margin-bottom:15px}
+.card{background:#111a2d;border:1px solid #233253;border-radius:16px;padding:15px;margin-bottom:12px}
+.title{display:flex;justify-content:space-between;align-items:center}
+.title h2{font-size:18px;margin:0}
+.muted{color:#8999bb;font-size:13px}
+.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:9px}
+.metric{background:#0c1426;border-radius:12px;padding:13px}
+.metric b{display:block;font-size:22px;margin-top:4px}
+.match{border-top:1px solid #24304b;padding:14px 0}
+.match:first-child{border-top:0}
+.row{display:flex;justify-content:space-between;align-items:center;gap:10px}
+.teams{font-size:16px;font-weight:700}
+.league{font-size:12px;color:#8193b8;margin-bottom:5px}
+.badge{border-radius:9px;padding:6px 8px;font-size:11px;background:#164d3c;color:#a9f3d4}
+.warn{background:#5b431c;color:#ffd994}
+.danger{background:#5b2232;color:#ffc2d0}
+.blue{background:#203b78;color:#bdd0ff}
+.bar{height:7px;background:#26334e;border-radius:8px;overflow:hidden;margin-top:8px}
+.fill{height:100%;background:#607fff}
+.probs{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-top:10px}
+.prob{background:#0b1324;border-radius:9px;text-align:center;padding:8px;font-size:12px}
+.prob strong{display:block;font-size:17px}
+.btn{border:0;border-radius:11px;padding:11px 14px;background:#587aff;color:white;font-weight:700}
+.btn.full{width:100%;margin-top:10px}
+.hidden{display:none}
+.list{line-height:2}
+.alert{padding:11px;border-radius:11px;background:#301b24;color:#ffc4d0;margin-top:10px}
+.good{padding:11px;border-radius:11px;background:#123127;color:#a9f2d2;margin-top:10px}
+footer{text-align:center;color:#687896;font-size:12px;padding:30px}
 </style>
 </head>
+
 <body>
-<header><h1>⚽ JARVIS Football AI</h1><div class="sub">足球智能预测 · 风险优先 · 不强行推荐</div></header>
+
+<header>
+<h1>⚽ JARVIS Football AI</h1>
+<div class="sub">智能足球分析中心 · 概率优先 · 风险控制 · 自动复盘</div>
+</header>
+
 <nav>
-<button class="active" onclick="tab('today',this)">今日比赛</button>
-<button onclick="tab('predict',this)">AI预测</button>
-<button onclick="tab('market',this)">盘口分析</button>
-<button onclick="tab('history',this)">历史数据库</button>
-<button onclick="tab('review',this)">AI复盘</button>
+<button class="active" onclick="show('home',this)">首页</button>
+<button onclick="show('matches',this)">今日比赛</button>
+<button onclick="show('ai',this)">AI预测</button>
+<button onclick="show('market',this)">盘口异动</button>
+<button onclick="show('history',this)">历史数据库</button>
+<button onclick="show('review',this)">赛后复盘</button>
 </nav>
+
 <main>
-<section id="today">
+
+<section id="home">
+
 <div class="grid">
-<div class="metric">今日赛事<b>126</b><span class="muted">API-Football</span></div>
-<div class="metric">已分析<b>38</b><span class="muted">Jarvis Engine</span></div>
+<div class="metric">今日赛事<b>126</b><span class="muted">待实时API</span></div>
+<div class="metric">AI分析<b>38</b><span class="muted">当前筛选</span></div>
+<div class="metric">高置信度<b>8</b><span class="muted">重点关注</span></div>
+<div class="metric">风险场次<b>11</b><span class="muted">谨慎处理</span></div>
 </div>
-<div class="card"><div class="match"><div><div class="muted">英超</div><div class="teams">主队 FC　vs　客队 FC</div></div><span class="badge">模型主选</span></div>
-<p class="muted">胜 64% · 平 22% · 负 14%</p><div class="bar"><div class="fill" style="width:64%"></div></div></div>
-<div class="card"><div class="match"><div><div class="muted">示例赛事</div><div class="teams">主队 United　vs　客队 City</div></div><span class="badge warn">谨慎观察</span></div>
-<p class="muted">胜 43% · 平 31% · 负 26%</p><div class="bar"><div class="fill" style="width:43%"></div></div></div>
-<button class="btn" onclick="alert('正式版将从 API-Football 自动刷新比赛数据')">刷新比赛数据</button>
+
+<div class="card">
+<div class="title">
+<h2>🔥 AI重点场次</h2>
+<span class="badge">模型主选</span>
+</div>
+
+<div class="match">
+<div class="league">英超 · 示例</div>
+<div class="row">
+<div class="teams">主队 FC<br><span class="muted">vs 客队 FC</span></div>
+<span class="badge">主胜</span>
+</div>
+
+<div class="probs">
+<div class="prob">主胜<strong>64%</strong></div>
+<div class="prob">平局<strong>22%</strong></div>
+<div class="prob">客胜<strong>14%</strong></div>
+</div>
+
+<div class="bar"><div class="fill" style="width:64%"></div></div>
+
+<p class="muted">预估比分：2-1 · 置信度 78%</p>
+</div>
+
+<div class="match">
+<div class="league">示例赛事</div>
+<div class="row">
+<div class="teams">United<br><span class="muted">vs City</span></div>
+<span class="badge warn">谨慎</span>
+</div>
+
+<div class="probs">
+<div class="prob">主胜<strong>43%</strong></div>
+<div class="prob">平局<strong>31%</strong></div>
+<div class="prob">客胜<strong>26%</strong></div>
+</div>
+
+<div class="alert">⚠️ 平局风险较高，不强行推荐。</div>
+</div>
+
+</div>
+
+<div class="card">
+<div class="title">
+<h2>⚠️ 风险监控</h2>
+<span class="badge danger">重点</span>
+</div>
+<p>平局风险较高：<b>7场</b></p>
+<p>冷门风险较高：<b>5场</b></p>
+<p>模型与市场冲突：<b>3场</b></p>
+<div class="alert">证据不足的比赛自动进入“暂不推荐”。</div>
+</div>
+
 </section>
 
-<section id="predict" class="hidden">
-<div class="card"><h2>AI预测</h2><div class="grid">
-<div class="metric">主胜<b>64%</b></div><div class="metric">平局<b>22%</b></div>
-<div class="metric">客胜<b>14%</b></div><div class="metric">置信度<b>78%</b></div>
-</div><p class="muted">模型：ELO + Poisson + 历史相似盘 + 市场风险（正式版接入）</p><div class="badge">推荐：主胜</div></div>
+
+<section id="matches" class="hidden">
+
+<div class="card">
+<div class="title">
+<h2>📅 今日比赛</h2>
+<button class="btn" onclick="refresh()">刷新</button>
+</div>
+
+<div class="match">
+<div class="league">英超</div>
+<div class="row"><div class="teams">主队 FC vs 客队 FC</div><span class="blue badge">分析</span></div>
+</div>
+
+<div class="match">
+<div class="league">西甲</div>
+<div class="row"><div class="teams">Madrid FC vs Sevilla FC</div><span class="badge">分析</span></div>
+</div>
+
+<div class="match">
+<div class="league">意甲</div>
+<div class="row"><div class="teams">Roma FC vs Milan FC</div><span class="warn badge">风险</span></div>
+</div>
+
+<div class="match">
+<div class="league">德甲</div>
+<div class="row"><div class="teams">Berlin FC vs Bayern FC</div><span class="badge danger">冷门风险</span></div>
+</div>
+
+<button class="btn full" onclick="alert('正式版将通过 API-Football 自动更新比赛')">
+🔄 获取最新比赛
+</button>
+</div>
+
 </section>
+
+
+<section id="ai" class="hidden">
+
+<div class="card">
+<h2>🧠 Jarvis AI 综合预测</h2>
+
+<div class="grid">
+<div class="metric">主胜<b>64%</b></div>
+<div class="metric">平局<b>22%</b></div>
+<div class="metric">客胜<b>14%</b></div>
+<div class="metric">置信度<b>78%</b></div>
+</div>
+
+<div class="good">
+模型主选：主胜
+</div>
+
+<p>预期进球：<b>1.72 - 0.96</b></p>
+<p>模型比分：<b>2-1</b></p>
+<p>平局风险：<b>22%</b></p>
+<p>冷门风险：<b>18%</b></p>
+
+<div class="muted">
+ELO + Poisson + 近期状态 + 历史相似盘 + 市场数据
+</div>
+</div>
+
+<div class="card">
+<h2>🎯 决策规则</h2>
+<div class="list">
+✓ 高置信度 → 模型主选<br>
+⚠ 平局概率偏高 → 谨慎<br>
+⚠ 冷门风险偏高 → 谨慎<br>
+⚠ 数据冲突 → 暂不推荐<br>
+✓ 赛后自动记录结果
+</div>
+</div>
+
+</section>
+
 
 <section id="market" class="hidden">
-<div class="card"><h2>盘口风险</h2><p>初盘 → 即时盘：<b>待接入实时盘口数据</b></p><p>平局风险：<b>34%</b></p><p>冷门风险：<b>41%</b></p><span class="badge danger">存在模型/市场冲突时：暂不推荐</span></div>
+
+<div class="card">
+<h2>📈 盘口异动监控</h2>
+
+<div class="match">
+<div class="row">
+<span>初盘</span>
+<b>主让 0.5</b>
+</div>
+</div>
+
+<div class="match">
+<div class="row">
+<span>即时盘</span>
+<b>主让 0.75</b>
+</div>
+</div>
+
+<div class="good">盘口方向：待实时数据确认</div>
+
+<div class="alert">
+⚠️ 正式版将比较初盘 → 即时盘 → 临场数据。
+</div>
+</div>
+
+<div class="card">
+<h2>🚨 模型冲突</h2>
+<p>数学模型：主胜</p>
+<p>市场信号：待确认</p>
+<p>风险等级：<b>观察</b></p>
+</div>
+
 </section>
+
 
 <section id="history" class="hidden">
-<div class="card"><h2>历史数据库</h2><p>CSV历史库：<b>待接入</b></p><p class="muted">正式版用于历史同赔、相似盘型、回测，不使用截图代替CSV历史库。</p></div>
+
+<div class="card">
+<h2>📚 历史数据库</h2>
+
+<div class="grid">
+<div class="metric">历史比赛<b>—</b></div>
+<div class="metric">相似盘型<b>—</b></div>
+<div class="metric">历史同赔<b>—</b></div>
+<div class="metric">回测命中率<b>—</b></div>
+</div>
+
+<div class="good">
+CSV历史数据库入口已预留。
+</div>
+
+<p class="muted">
+正式版优先使用你的CSV历史数据库进行相似盘型、同赔和回测，不把截图当作历史数据库。
+</p>
+</div>
+
 </section>
 
+
 <section id="review" class="hidden">
-<div class="card"><h2>AI复盘</h2><div class="grid">
-<div class="metric">昨日命中率<b>—</b></div><div class="metric">模型偏差<b>—</b></div>
-</div><p class="muted">赛后自动记录预测与实际结果，统计错误类型并调整模型权重。</p></div>
+
+<div class="card">
+<h2>🔄 AI赛后复盘</h2>
+
+<div class="grid">
+<div class="metric">预测场次<b>—</b></div>
+<div class="metric">实际命中<b>—</b></div>
+<div class="metric">错误类型<b>—</b></div>
+<div class="metric">模型偏差<b>—</b></div>
+</div>
+
+<div class="alert">
+系统会重点分析：为什么错、盘口是否误导、平局是否低估、冷门是否漏判。
+</div>
+
+<button class="btn full" onclick="alert('正式版将在比赛结束后自动复盘')">
+开始复盘
+</button>
+</div>
+
 </section>
+
 </main>
+
+<footer>
+Jarvis Football AI · V1 Web Dashboard
+</footer>
+
 <script>
-function tab(id,btn){
- document.querySelectorAll('main section').forEach(x=>x.classList.add('hidden'));
- document.getElementById(id).classList.remove('hidden');
- document.querySelectorAll('nav button').forEach(x=>x.classList.remove('active'));
- btn.classList.add('active');
+function show(id,btn){
+document.querySelectorAll("main section").forEach(x=>x.classList.add("hidden"));
+document.getElementById(id).classList.remove("hidden");
+document.querySelectorAll("nav button").forEach(x=>x.classList.remove("active"));
+btn.classList.add("active");
+window.scrollTo(0,0);
+}
+
+function refresh(){
+alert("正式版将从 API-Football 自动获取最新赛事数据");
 }
 </script>
+
 </body>
 </html>
