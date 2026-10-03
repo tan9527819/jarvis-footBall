@@ -2,12 +2,11 @@ name: Jarvis Football AI
 
 on:
   workflow_dispatch:
-  push:
-    branches:
-      - main
+  schedule:
+    - cron: "0 */6 * * *"
 
 jobs:
-  jarvis:
+  football-data:
     runs-on: ubuntu-latest
 
     steps:
@@ -19,29 +18,68 @@ jobs:
         with:
           python-version: "3.11"
 
-      - name: Install dependencies
-        run: |
-          python -m pip install --upgrade pip
-          if [ -f requirements.txt ]; then
-            pip install -r requirements.txt
-          fi
+      - name: Install requests
+        run: pip install requests
 
-      - name: Run existing tests
+      - name: Get API-Football data
         env:
-          PYTHONPATH: .
+          API_FOOTBALL_KEY: ${{ secrets.API_FOOTBALL_KEY }}
         run: |
-          python -m unittest tests.test_orchestrator -v
+          python - <<'PY'
+          import os
+          import requests
+          import json
+          from datetime import datetime
 
-      - name: Jarvis AI status
+          key = os.environ["API_FOOTBALL_KEY"]
+
+          url = "https://v3.football.api-sports.io/fixtures"
+
+          headers = {
+              "x-apisports-key": key
+          }
+
+          params = {
+              "date": datetime.utcnow().strftime("%Y-%m-%d")
+          }
+
+          r = requests.get(
+              url,
+              headers=headers,
+              params=params,
+              timeout=30
+          )
+
+          r.raise_for_status()
+
+          data = r.json()
+
+          print("API-Football connection OK")
+          print("Fixtures:", len(data.get("response", [])))
+
+          os.makedirs("data/api_football", exist_ok=True)
+
+          with open(
+              "data/api_football/today.json",
+              "w",
+              encoding="utf-8"
+          ) as f:
+              json.dump(
+                  data,
+                  f,
+                  ensure_ascii=False,
+                  indent=2
+              )
+          PY
+
+      - name: Commit football data
         run: |
-          echo "================================"
-          echo "      JARVIS FOOTBALL AI"
-          echo "================================"
-          echo "ELO: ENABLED"
-          echo "Poisson: ENABLED"
-          echo "API-Football: READY"
-          echo "Historical CSV: READY"
-          echo "Market movement: NEXT"
-          echo "Backtest: NEXT"
-          echo "================================"
-          echo "Jarvis workflow completed."
+          git config user.name "github-actions"
+          git config user.email "github-actions@github.com"
+
+          git add data/api_football/today.json
+
+          git diff --cached --quiet || \
+          git commit -m "Update football API data"
+
+          git push
