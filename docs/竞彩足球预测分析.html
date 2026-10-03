@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#07111f"><title>竞彩足球预测分析</title>
+<style>
+*{box-sizing:border-box}body{margin:0;background:#07111f;color:#edf4ff;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}.app{max-width:980px;margin:auto;padding:12px 12px 76px}.head{position:sticky;top:0;z-index:5;background:#07111ff2;backdrop-filter:blur(10px);padding:10px 2px;border-bottom:1px solid #1d3047}.logo{font-size:23px;font-weight:850}.sub{font-size:11px;color:#8196b0;margin-top:4px}.nav,.filters{display:flex;gap:7px;overflow:auto;margin:11px 0}.nav button,.filters button{border:1px solid #263b54;background:#0d1a2b;color:#b9c8da;border-radius:9px;padding:8px 12px;white-space:nowrap}.nav .active,.filters .active{background:#20456d;color:#fff;border-color:#3c6f9d}.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:7px}.stat{background:#0d1a2b;border:1px solid #1c3149;border-radius:13px;padding:10px}.stat b{display:block;font-size:18px}.stat span{font-size:9px;color:#8196b0}.section{font-size:12px;font-weight:750;margin:15px 2px 7px;color:#dbe8f7}.card{background:#0d1a2b;border:1px solid #1d3149;border-radius:15px;padding:13px;margin:8px 0}.time{float:right;color:#9eb1c6;font-size:11px}.league{font-size:10px;color:#83a0bd}.teams{font-size:16px;font-weight:800;margin:10px 0}.vs{color:#607994;padding:0 8px}.tags{display:flex;gap:5px;flex-wrap:wrap}.tag{font-size:9px;background:#18283b;color:#afc2d6;padding:5px 7px;border-radius:7px}.ok{background:#143629;color:#91dfbd}.warn{background:#43331d;color:#ffd68f}.risk{background:#46232c;color:#ffc8d3}.five{display:grid;grid-template-columns:repeat(5,1fr);gap:5px;margin-top:10px}.five div{background:#091421;border-radius:8px;padding:7px 3px;text-align:center;color:#7890aa;font-size:9px}.five b{display:block;color:#edf4ff;font-size:11px;margin-top:3px}.buttons{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:9px}.buttons button{border:0;border-radius:8px;background:#183653;color:#dcecff;padding:9px}.detail{display:none;border-top:1px solid #1d3047;margin-top:10px;padding-top:10px}.detail.open{display:block}.grid{display:grid;grid-template-columns:1fr 1fr;gap:6px}.box{background:#091421;border-radius:8px;padding:9px}.k{font-size:9px;color:#7088a3}.v{font-size:12px;margin-top:3px}.gate{margin-top:8px;background:#2a2118;color:#e8c89f;border-radius:9px;padding:9px;font-size:10px;line-height:1.5}.empty{text-align:center;color:#8095ae;padding:45px 10px}.stats30{background:#0d1a2b;border:1px solid #1c3149;border-radius:13px;padding:12px;margin-top:10px}.stats30 h3{margin:0 0 8px;font-size:13px}.metrics{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}.metric{background:#091421;border-radius:8px;padding:8px}.metric b{font-size:14px}.metric span{display:block;font-size:9px;color:#7188a3;margin-top:2px}.lock{font-size:9px;color:#7f95ad;margin-top:8px}.bottom{position:fixed;bottom:0;left:0;right:0;background:#0b1726f5;border-top:1px solid #20334b;display:flex;justify-content:center;gap:24px;padding:9px;font-size:10px;color:#8ea3bb}.bottom b{color:#fff}@media(max-width:600px){.stats{grid-template-columns:repeat(2,1fr)}.metrics{grid-template-columns:repeat(2,1fr)}}
+</style></head>
+<body><div class="app">
+<div class="head"><div class="logo">⚽ 竞彩足球预测分析</div><div class="sub">AI预测 · 数据异动 · 历史匹配 · 赛后复盘</div></div>
+<div class="nav"><button class="active">赛事广场</button><button>AI预测</button><button>数据异动</button><button>历史匹配</button><button>赛后统计</button></div>
+<div class="stats"><div class="stat"><b id="total">—</b><span>今日赛事</span></div><div class="stat"><b id="focus">—</b><span>AI重点</span></div><div class="stat"><b id="risk">—</b><span>风险赛事</span></div><div class="stat"><b id="status">检测</b><span>数据状态</span></div></div>
+<div class="filters"><button class="active" data-f="all">全部</button><button data-f="focus">🔥 AI重点</button><button data-f="risk">⚠️风险</button><button data-f="early">早场</button></div>
+<div class="section">今日赛事广场</div>
+<div id="list"><div class="empty">正在读取赛事数据…</div></div>
+<div class="stats30"><h3>📊 最近30天赛后统计</h3><div class="metrics"><div class="metric"><b>—</b><span>预测场次</span></div><div class="metric"><b>—</b><span>胜平负命中率</span></div><div class="metric"><b>—</b><span>让球命中率</span></div><div class="metric"><b>—</b><span>进球数命中率</span></div><div class="metric"><b>—</b><span>比分命中率</span></div><div class="metric"><b>—</b><span>半全场命中率</span></div></div><div class="lock">🔒 预测记录在开赛后锁定；未接入真实赛后数据库前不显示虚假命中率。</div></div>
+<div class="bottom"><span><b>赛事广场</b></span><span>AI预测</span><span>异动</span><span>历史</span><span>统计</span></div>
+</div>
+<script>
+let games=[],src="";
+const paths=["data/api_football/today.json","demo/data/api_football/today.json","demo/data/samples/sample.json","data/samples/sample.json","samples/sample.json"];
+const arr=d=>Array.isArray(d)?d:(d&&d.response)||d?.matches||d?.fixtures||[];
+const name=(g,s)=>g?.teams?.[s]?.name||g?.[s]?.name||g?.[s]||"未知球队";
+const league=g=>g?.league?.name||g?.league_name||"未知联赛";
+const date=g=>g?.fixture?.date||g?.date||g?.kickoff||g?.start_time;
+const time=g=>{let x=date(g),d=x&&new Date(x);return d&&!isNaN(d)?d.toLocaleTimeString("zh-CN",{hour:"2-digit",minute:"2-digit"}):"时间待定"};
+const risk=g=>/risk|warning|anomaly|异动|风险|冷门/i.test(JSON.stringify(g));
+const focus=(g,i)=>risk(g)||i<Math.max(3,Math.ceil(games.length*.15));
+async function load(){for(const p of paths){try{let r=await fetch(p+"?t="+Date.now(),{cache:"no-store"});if(!r.ok)continue;let d=await r.json(),a=arr(d);if(a.length||p.includes("sample")){games=a;src=p;break}}catch(e){}}}
+function render(f="all"){
+ let rows=games.map((g,i)=>({g,i})).filter(x=>f==="all"||(f==="risk"&&risk(x.g))||(f==="focus"&&focus(x.g,x.i))||(f==="early"&&date(x.g)&&new Date(date(x.g)).getHours()<12));
+ let el=document.getElementById("list");if(!rows.length){el.innerHTML='<div class="empty">暂无符合条件的赛事</div>';return}
+ let groups={};rows.forEach(x=>(groups[league(x.g)]??=[]).push(x));
+ el.innerHTML=Object.entries(groups).map(([ln,rs])=>'<div class="section">'+ln+'</div>'+rs.map(({g,i})=>{
+ let r=risk(g),h=focus(g,i),id="d"+i;
+ return `<div class="card"><span class="time">${time(g)}</span><span class="league">${ln}</span><div class="teams">${name(g,"home")}<span class="vs">VS</span>${name(g,"away")}</div>
+ <div class="tags"><span class="tag ${h?"warn":"ok"}">${h?"🔥 AI重点":"普通赛事"}</span><span class="tag ${r?"risk":"ok"}">${r?"⚠️ 风险":"数据正常"}</span><span class="tag">${src.includes("sample")?"测试数据":"实时数据"}</span></div>
+ <div class="five"><div>胜平负<b>待分析</b></div><div>让球<b>待分析</b></div><div>进球数<b>待分析</b></div><div>比分<b>待分析</b></div><div>半全场<b>待分析</b></div></div>
+ <div class="buttons"><button onclick="toggle('${id}')">🧠 AI分析</button><button onclick="toggle('${id}')">📊 数据证据</button></div>
+ <div class="detail" id="${id}"><div class="grid"><div class="box"><div class="k">胜/平/负</div><div class="v">待接入赔率模型</div></div><div class="box"><div class="k">让球</div><div class="v">待接入盘口</div></div><div class="box"><div class="k">进球数</div><div class="v">待接入Poisson</div></div><div class="box"><div class="k">比分</div><div class="v">待接入模型</div></div><div class="box"><div class="k">历史同赔</div><div class="v">待接入CSV</div></div><div class="box"><div class="k">盘口异动</div><div class="v">待接入</div></div></div><div class="gate">Risk Gate：证据不完整时不生成虚假概率。当前结论：<b>暂不推荐</b>。</div></div></div>`;
+ }).join("")).join("");
+}
+function toggle(id){document.getElementById(id).classList.toggle("open")}
+document.querySelectorAll(".filters button").forEach(b=>b.onclick=()=>{document.querySelectorAll(".filters button").forEach(x=>x.classList.remove("active"));b.classList.add("active");render(b.dataset.f)});
+(async()=>{await load();total.textContent=games.length;focus.textContent=games.filter((g,i)=>focus(g,i)).length;risk.textContent=games.filter(risk).length;status.textContent=src.includes("sample")?"测试":"正常";render()})();
+</script></body></html>
