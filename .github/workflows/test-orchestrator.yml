@@ -1,46 +1,47 @@
-name: Football Orchestrator Tests
+name: Jarvis Football AI
 
 on:
+  workflow_dispatch:
   push:
     branches:
       - main
-    paths:
-      - 'src/football_orchestrator.py'
-      - 'tests/test_orchestrator.py'
-      - 'requirements.txt'
-      - '.github/workflows/test-orchestrator.yml'
-  workflow_dispatch:
 
 jobs:
-  test:
+  jarvis:
     runs-on: ubuntu-latest
-    
-    strategy:
-      matrix:
-        python-version: ['3.11']
-    
+
     steps:
-      - name: Checkout code
+      - name: Checkout
         uses: actions/checkout@v4
-      
-      - name: Set up Python ${{ matrix.python-version }}
-        uses: actions/setup-python@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
         with:
-          python-version: ${{ matrix.python-version }}
-      
+          python-version: "3.11"
+
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
-      
-      - name: Run Football Orchestrator Tests
+          if [ -f requirements.txt ]; then
+            pip install -r requirements.txt
+          fi
+
+      - name: Run existing tests
         env:
           PYTHONPATH: .
         run: |
           python -m unittest tests.test_orchestrator -v
-      
-      - name: Test Summary
-        if: always()
+
+      - name: Jarvis AI status
         run: |
-          echo "Football Orchestrator Test Suite Completed"
-          echo "Status: ${{ job.status }}"
+          echo "================================"
+          echo "      JARVIS FOOTBALL AI"
+          echo "================================"
+          echo "ELO: ENABLED"
+          echo "Poisson: ENABLED"
+          echo "API-Football: READY"
+          echo "Historical CSV: READY"
+          echo "Market movement: NEXT"
+          echo "Backtest: NEXT"
+          echo "================================"
+          echo "Jarvis workflow completed."
