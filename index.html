@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Jarvis Football AI</title>
+<style>
+*{box-sizing:border-box}body{margin:0;background:#0b1020;color:#eef2ff;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+header{padding:22px 18px;background:linear-gradient(135deg,#111a35,#18244b);position:sticky;top:0;z-index:2}
+h1{margin:0;font-size:25px}.sub{opacity:.65;font-size:13px;margin-top:5px}
+nav{display:flex;gap:8px;padding:12px 14px;overflow:auto;background:#0d1429}nav button{white-space:nowrap;border:0;border-radius:18px;padding:9px 14px;background:#1b2748;color:#dce6ff}nav button.active{background:#5b7cfa;color:#fff}
+main{padding:14px;max-width:900px;margin:auto}.card{background:#121a31;border:1px solid #253252;border-radius:16px;padding:16px;margin-bottom:12px}.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}.metric{background:#0e1529;border-radius:12px;padding:13px}.metric b{display:block;font-size:22px;margin-top:4px}.muted{color:#91a0c3;font-size:13px}.bar{height:8px;background:#27324d;border-radius:8px;overflow:hidden;margin-top:8px}.fill{height:100%;background:#6d8cff}.match{display:flex;justify-content:space-between;gap:10px;align-items:center}.teams{font-size:17px;font-weight:700}.badge{padding:6px 9px;border-radius:10px;background:#1d6b52;color:#a8f2d0;font-size:12px}.warn{background:#6b4c1d;color:#ffd999}.danger{background:#69283a;color:#ffc0cf}.btn{width:100%;padding:13px;border:0;border-radius:12px;background:#5b7cfa;color:white;font-size:15px;font-weight:700;margin-top:10px}.hidden{display:none}.small{font-size:12px}
+</style>
+</head>
+<body>
+<header><h1>⚽ JARVIS Football AI</h1><div class="sub">足球智能预测 · 风险优先 · 不强行推荐</div></header>
+<nav>
+<button class="active" onclick="tab('today',this)">今日比赛</button>
+<button onclick="tab('predict',this)">AI预测</button>
+<button onclick="tab('market',this)">盘口分析</button>
+<button onclick="tab('history',this)">历史数据库</button>
+<button onclick="tab('review',this)">AI复盘</button>
+</nav>
+<main>
+<section id="today">
+<div class="grid">
+<div class="metric">今日赛事<b>126</b><span class="muted">API-Football</span></div>
+<div class="metric">已分析<b>38</b><span class="muted">Jarvis Engine</span></div>
+</div>
+<div class="card"><div class="match"><div><div class="muted">英超</div><div class="teams">主队 FC　vs　客队 FC</div></div><span class="badge">模型主选</span></div>
+<p class="muted">胜 64% · 平 22% · 负 14%</p><div class="bar"><div class="fill" style="width:64%"></div></div></div>
+<div class="card"><div class="match"><div><div class="muted">示例赛事</div><div class="teams">主队 United　vs　客队 City</div></div><span class="badge warn">谨慎观察</span></div>
+<p class="muted">胜 43% · 平 31% · 负 26%</p><div class="bar"><div class="fill" style="width:43%"></div></div></div>
+<button class="btn" onclick="alert('正式版将从 API-Football 自动刷新比赛数据')">刷新比赛数据</button>
+</section>
+
+<section id="predict" class="hidden">
+<div class="card"><h2>AI预测</h2><div class="grid">
+<div class="metric">主胜<b>64%</b></div><div class="metric">平局<b>22%</b></div>
+<div class="metric">客胜<b>14%</b></div><div class="metric">置信度<b>78%</b></div>
+</div><p class="muted">模型：ELO + Poisson + 历史相似盘 + 市场风险（正式版接入）</p><div class="badge">推荐：主胜</div></div>
+</section>
+
+<section id="market" class="hidden">
+<div class="card"><h2>盘口风险</h2><p>初盘 → 即时盘：<b>待接入实时盘口数据</b></p><p>平局风险：<b>34%</b></p><p>冷门风险：<b>41%</b></p><span class="badge danger">存在模型/市场冲突时：暂不推荐</span></div>
+</section>
+
+<section id="history" class="hidden">
+<div class="card"><h2>历史数据库</h2><p>CSV历史库：<b>待接入</b></p><p class="muted">正式版用于历史同赔、相似盘型、回测，不使用截图代替CSV历史库。</p></div>
+</section>
+
+<section id="review" class="hidden">
+<div class="card"><h2>AI复盘</h2><div class="grid">
+<div class="metric">昨日命中率<b>—</b></div><div class="metric">模型偏差<b>—</b></div>
+</div><p class="muted">赛后自动记录预测与实际结果，统计错误类型并调整模型权重。</p></div>
+</section>
+</main>
+<script>
+function tab(id,btn){
+ document.querySelectorAll('main section').forEach(x=>x.classList.add('hidden'));
+ document.getElementById(id).classList.remove('hidden');
+ document.querySelectorAll('nav button').forEach(x=>x.classList.remove('active'));
+ btn.classList.add('active');
+}
+</script>
+</body>
+</html>
