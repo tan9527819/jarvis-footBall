@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Jarvis Football AI V3.1</title>
+<title>Jarvis Football AI V3.2</title>
 
 <style>
 *{box-sizing:border-box}
@@ -24,6 +24,11 @@ z-index:10
 }
 
 h1{margin:0;font-size:23px}
+
+h2{
+font-size:18px;
+margin:4px 0 12px
+}
 
 .sub{
 margin-top:4px;
@@ -119,16 +124,6 @@ background:#184b3b;
 color:#aaf0d0
 }
 
-.warn{
-background:#5b431c;
-color:#ffd997
-}
-
-.danger{
-background:#5b2433;
-color:#ffc5d1
-}
-
 .probs{
 display:grid;
 grid-template-columns:repeat(3,1fr);
@@ -171,10 +166,29 @@ background:#123127
 background:#351b25
 }
 
+.hot{
+border:1px solid #7c4d22
+}
+
 .loading{
 text-align:center;
 padding:25px;
 color:#8c9dbc
+}
+
+.tag{
+display:inline-block;
+padding:4px 7px;
+border-radius:7px;
+margin:3px 3px 0 0;
+background:#182641;
+font-size:11px
+}
+
+@media(max-width:600px){
+.grid{
+grid-template-columns:repeat(2,1fr)
+}
 }
 </style>
 </head>
@@ -183,15 +197,17 @@ color:#8c9dbc
 
 <header>
 
-<h1>⚽ JARVIS Football AI V3.1</h1>
+<h1>⚽ JARVIS Football AI V3.2</h1>
 
 <div class="sub">
-真实赛事数据 · 历史CSV · 风险引擎
+真实赛事数据 · 历史CSV · 冷门大神雷达 · 风险引擎
 </div>
 
 </header>
 
 <main>
+
+<!-- 数据概况 -->
 
 <div class="card">
 
@@ -223,12 +239,75 @@ color:#8c9dbc
 
 </div>
 
-<button class="primary" onclick="loadFootballData()">
+<button
+class="primary"
+onclick="loadFootballData()">
+
 🔄 刷新真实比赛
+
 </button>
 
 </div>
 
+
+<!-- 冷门大神雷达 -->
+
+<div class="card hot">
+
+<h2>🔥 冷门大神雷达</h2>
+
+<div class="muted">
+公开预测源只作为交叉验证，不直接照抄。
+</div>
+
+<div class="grid" style="margin-top:10px">
+
+<div class="metric">
+
+平局指数
+
+<b id="drawIndex">—</b>
+
+</div>
+
+<div class="metric">
+
+让平指数
+
+<b id="handicapDraw">—</b>
+
+</div>
+
+<div class="metric">
+
+冷门指数
+
+<b id="upsetIndex">—</b>
+
+</div>
+
+<div class="metric">
+
+超级冷门
+
+<b id="superUpset">—</b>
+
+</div>
+
+</div>
+
+<div
+class="signal"
+id="radarText">
+
+选择比赛后生成冷门雷达。
+
+</div>
+
+</div>
+
+
+<!-- 比赛 -->
 
 <div class="card">
 
@@ -252,6 +331,8 @@ API-Football
 
 </div>
 
+
+<!-- 分析引擎 -->
 
 <div class="card">
 
@@ -279,7 +360,12 @@ API-Football
 
 <div class="line">
 <span>盘口异动</span>
-<b>等待盘口数据</b>
+<b>待接入</b>
+</div>
+
+<div class="line">
+<span>冷门大神</span>
+<b>交叉验证</b>
 </div>
 
 <div class="line">
@@ -288,47 +374,70 @@ API-Football
 </div>
 
 <div class="signal">
-证据不足或模型冲突时，Jarvis 自动输出：
+
+证据不足或模型冲突时：
+
 <b>暂不推荐</b>
-</div>
 
 </div>
 
+</div>
+
+
+<!-- 当前分析 -->
 
 <div class="card">
 
-<h2>📊 Jarvis 当前分析</h2>
+<h2>📊 当前分析</h2>
 
 <div class="grid">
 
 <div class="metric">
+
 主胜
+
 <b id="homeP">—</b>
+
 </div>
 
 <div class="metric">
+
 平局
+
 <b id="drawP">—</b>
+
 </div>
 
 <div class="metric">
+
 客胜
+
 <b id="awayP">—</b>
+
 </div>
 
 <div class="metric">
+
 置信度
+
 <b id="confidence">—</b>
-</div>
 
 </div>
 
-<div class="signal" id="decision">
+</div>
+
+<div
+class="signal"
+id="decision">
+
 选择比赛后开始分析
-</div>
 
 </div>
 
+</div>
+
+
+<!-- 风险 -->
 
 <div class="card">
 
@@ -345,8 +454,13 @@ API-Football
 </div>
 
 <div class="line">
-<span>盘口异动</span>
-<b>待接入</b>
+<span>大神一致率</span>
+<b id="consensus">—</b>
+</div>
+
+<div class="line">
+<span>证据等级</span>
+<b id="evidence">—</b>
 </div>
 
 </div>
@@ -360,22 +474,25 @@ let footballData=null;
 
 
 /* =========================
-   读取 GitHub Actions 生成的数据
+读取 API-Football 数据
 ========================= */
 
 async function loadFootballData(){
 
-const box=document.getElementById("matches");
+const box=
+document.getElementById("matches");
 
 box.innerHTML=
 '<div class="loading">正在读取真实比赛数据……</div>';
 
-document.getElementById("status").textContent="读取中";
+document.getElementById("status")
+.textContent="读取中";
 
 
 try{
 
-const response=await fetch(
+const response=
+await fetch(
 "data/api_football/today.json?"+Date.now()
 );
 
@@ -387,22 +504,29 @@ throw new Error(
 
 }
 
-footballData=await response.json();
+footballData=
+await response.json();
 
 const games=
 footballData.response || [];
 
+
 document.getElementById(
 "gameCount"
-).textContent=games.length;
+).textContent=
+games.length;
+
 
 document.getElementById(
 "dataStatus"
-).textContent="正常";
+).textContent=
+"正常";
+
 
 document.getElementById(
 "status"
-).textContent="已加载";
+).textContent=
+"已加载";
 
 
 if(games.length===0){
@@ -417,23 +541,34 @@ return;
 
 renderMatches(games);
 
+
 }catch(error){
 
 console.error(error);
 
+
 document.getElementById(
 "dataStatus"
-).textContent="失败";
+).textContent=
+"失败";
+
 
 document.getElementById(
 "status"
-).textContent="错误";
+).textContent=
+"错误";
+
 
 box.innerHTML=
+
 '<div class="signal bad">'+
+
 '无法读取 data/api_football/today.json'+
+
 '<br><br>'+
+
 '请确认 GitHub Actions 已成功运行。'+
+
 '</div>';
 
 }
@@ -442,7 +577,7 @@ box.innerHTML=
 
 
 /* =========================
-   显示比赛
+显示比赛
 ========================= */
 
 function renderMatches(games){
@@ -457,24 +592,37 @@ games
 .slice(0,30)
 .forEach((item,index)=>{
 
-const fixture=item.fixture || {};
-const teams=item.teams || {};
-const league=item.league || {};
+const fixture=
+item.fixture || {};
+
+const teams=
+item.teams || {};
+
+const league=
+item.league || {};
+
 
 const home=
-teams.home?.name || "主队";
+teams.home?.name ||
+"主队";
+
 
 const away=
-teams.away?.name || "客队";
+teams.away?.name ||
+"客队";
+
 
 const leagueName=
-league.name || "未知联赛";
+league.name ||
+"未知联赛";
+
 
 const time=
 fixture.date
 ?
-new Date(fixture.date)
-.toLocaleTimeString(
+new Date(
+fixture.date
+).toLocaleTimeString(
 "zh-CN",
 {
 hour:"2-digit",
@@ -491,13 +639,16 @@ document.createElement("div");
 div.className="match";
 
 
-div.innerHTML=`
+div.innerHTML=
+
+`
 
 <div class="league">
 
 ${leagueName} · ${time}
 
 </div>
+
 
 <div class="row">
 
@@ -515,6 +666,7 @@ vs ${away}
 
 </div>
 
+
 <span class="badge">
 
 真实数据
@@ -523,11 +675,14 @@ vs ${away}
 
 </div>
 
+
 <button
+
 style="margin-top:10px;width:100%"
+
 onclick="analyzeMatch(${index})">
 
-🧠 Jarvis 分析
+🧠 Jarvis + 冷门雷达分析
 
 </button>
 
@@ -542,7 +697,7 @@ box.appendChild(div);
 
 
 /* =========================
-   单场分析
+单场分析
 ========================= */
 
 function analyzeMatch(index){
@@ -560,11 +715,6 @@ return;
 }
 
 
-/*
-当前没有把球队历史数据直接硬编码。
-这里先建立真实比赛 → Jarvis 引擎的接口。
-*/
-
 const home=
 game.teams.home.name;
 
@@ -573,19 +723,19 @@ game.teams.away.name;
 
 
 /*
-临时基础概率。
+基础概率接口。
 
-下一阶段：
-API-Football球队历史
-+
+后续接入：
+
 ELO
-+
 Poisson
-+
-CSV相似盘
-+
-盘口
-会替换这里。
+CSV
+历史同赔
+赔率
+盘口变化
+大神公开预测
+
+后替换。
 */
 
 let homeP=0.48;
@@ -595,15 +745,19 @@ let drawP=0.29;
 let awayP=0.23;
 
 
-/* 风险 */
+/* 当前置信度 */
 
 let confidence=67;
 
-let drawRisk=Math.round(drawP*100);
 
-let upsetRisk=
+/* =========================
+风险计算
+========================= */
+
+const upsetRisk=
 Math.round(
-(1-Math.max(
+(1 -
+Math.max(
 homeP,
 drawP,
 awayP
@@ -611,30 +765,104 @@ awayP
 );
 
 
+const drawRisk=
+Math.round(
+drawP*100
+);
+
+
+/* =========================
+冷门指数
+========================= */
+
+const drawIndex=
+Math.min(
+95,
+Math.round(
+drawP*100+12
+)
+);
+
+
+const handicapDraw=
+Math.min(
+95,
+Math.round(
+drawP*100+8
+)
+);
+
+
+const superUpset=
+Math.min(
+95,
+Math.max(
+0,
+upsetRisk-20
+)
+);
+
+
+/* =========================
+大神一致率接口
+
+注意：
+这里暂时不伪造真实大神数据。
+真正接入公开数据源后再自动计算。
+========================= */
+
+const consensus="待接入";
+
+
+const evidence=
+confidence>=70
+?
+"强"
+:
+confidence>=60
+?
+"中"
+:
+"弱";
+
+
+/* =========================
+显示概率
+========================= */
+
 document.getElementById(
 "homeP"
 ).textContent=
 Math.round(homeP*100)+"%";
+
 
 document.getElementById(
 "drawP"
 ).textContent=
 Math.round(drawP*100)+"%";
 
+
 document.getElementById(
 "awayP"
 ).textContent=
 Math.round(awayP*100)+"%";
+
 
 document.getElementById(
 "confidence"
 ).textContent=
 confidence+"%";
 
+
+/* =========================
+显示风险
+========================= */
+
 document.getElementById(
 "drawRisk"
 ).textContent=
 drawRisk+"%";
+
 
 document.getElementById(
 "upsetRisk"
@@ -642,52 +870,195 @@ document.getElementById(
 upsetRisk+"%";
 
 
+document.getElementById(
+"consensus"
+).textContent=
+consensus;
+
+
+document.getElementById(
+"evidence"
+).textContent=
+evidence;
+
+
+/* =========================
+显示冷门雷达
+========================= */
+
+document.getElementById(
+"drawIndex"
+).textContent=
+drawIndex;
+
+
+document.getElementById(
+"handicapDraw"
+).textContent=
+handicapDraw;
+
+
+document.getElementById(
+"upsetIndex"
+).textContent=
+upsetRisk;
+
+
+document.getElementById(
+"superUpset"
+).textContent=
+superUpset;
+
+
+/* =========================
+最终判断
+========================= */
+
 let decision;
+
 
 if(confidence<65){
 
 decision=
-"⚠️ 暂不推荐：证据不足";
+"⚪ 暂不推荐：证据不足";
 
-}else if(
-drawP===Math.max(
+}
+
+else if(
+drawP ===
+Math.max(
 homeP,
 drawP,
 awayP
-)){
+)
+){
 
 decision=
-"🟡 平局候选：谨慎";
+"🟡 平局候选：谨慎观察";
 
-}else{
+}
+
+else if(
+upsetRisk>=70
+){
 
 decision=
-"🟢 当前模型主选："+home;
+"💣 超级冷门风险：不要强行追正路";
+
+}
+
+else if(
+upsetRisk>=55
+){
+
+decision=
+"🔴 冷门风险：重点复核";
+
+}
+
+else{
+
+decision=
+"🟢 当前主选："+home;
 
 }
 
 
+/* =========================
+显示最终结果
+========================= */
+
 document.getElementById(
 "decision"
 ).innerHTML=
+
 decision+
+
 "<br><br>"+
+
 "<span class='muted'>"+
+
 home+
+
 " vs "+
+
 away+
+
 "</span>";
 
+
+/* =========================
+雷达文字
+========================= */
+
+let radar=
+"当前："+decision;
+
+
+if(drawIndex>=60){
+
+radar+=
+"<br><span class='tag'>平局关注</span>";
+
+}
+
+
+if(handicapDraw>=60){
+
+radar+=
+"<span class='tag'>让平关注</span>";
+
+}
+
+
+if(upsetRisk>=55){
+
+radar+=
+"<span class='tag'>冷门预警</span>";
+
+}
+
+
+if(superUpset>=60){
+
+radar+=
+"<span class='tag'>超级冷门</span>";
+
+}
+
+
+radar+=
+
+"<br><br>"+
+
+"<span class='muted'>"+
+
+"说明：大神数据尚未自动抓取。接入公开源后才计算真实一致率。"+
+
+"</span>";
+
+
+document.getElementById(
+"radarText"
+).innerHTML=
+radar;
+
+
 window.scrollTo({
-top:document.body.scrollHeight,
-behavior:"smooth"
+
+top:
+document.body.scrollHeight,
+
+behavior:
+"smooth"
+
 });
 
 }
 
 
 /* =========================
-   自动加载
+自动加载
 ========================= */
 
 loadFootballData();
