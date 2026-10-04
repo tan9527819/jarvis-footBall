@@ -1,177 +1,33 @@
-<!doctype html>
-<html lang="zh-CN">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>竞彩足球预测分析 V3.3</title>
-
-<style>
-*{box-sizing:border-box}
-body{
-margin:0;background:#070b14;color:#eef3ff;
-font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif
-}
-header{
-padding:18px 16px;
-background:linear-gradient(135deg,#101b36,#172c5b);
-position:sticky;top:0;z-index:10
-}
-h1{margin:0;font-size:22px}
-h2{font-size:18px;margin:4px 0 12px}
-.sub{margin-top:4px;font-size:12px;color:#91a2c4}
-main{max-width:1000px;margin:auto;padding:12px}
-.card{
-background:#101827;border:1px solid #23324f;
-border-radius:16px;padding:14px;margin-bottom:11px
-}
-.grid{
-display:grid;grid-template-columns:repeat(2,1fr);gap:8px
-}
-.metric{
-background:#0b1220;border-radius:11px;padding:11px
-}
-.metric b{
-display:block;font-size:21px;margin-top:3px
-}
-.muted{font-size:12px;color:#8c9dbc}
-button{
-border:0;border-radius:11px;padding:12px 14px;
-background:#1b2948;color:#dce7ff;font-weight:700
-}
-.primary{
-background:#5d80ff;color:white;width:100%;margin-top:10px
-}
-.match{
-padding:13px 0;border-top:1px solid #202d46
-}
-.match:first-child{border-top:0}
-.row{
-display:flex;justify-content:space-between;
-align-items:center;gap:10px
-}
-.team{font-size:16px;font-weight:750}
-.league{font-size:11px;color:#7890bd;margin-bottom:5px}
-.badge{
-font-size:11px;padding:5px 8px;border-radius:8px;
-background:#184b3b;color:#aaf0d0
-}
-.line{
-display:flex;justify-content:space-between;
-padding:8px 0;border-bottom:1px solid #202c43
-}
-.signal{
-padding:11px;border-radius:10px;
-background:#151f34;margin-top:10px
-}
-.good{background:#123127}
-.bad{background:#351b25}
-.hot{border:1px solid #7c4d22}
-.loading{
-text-align:center;padding:25px;color:#8c9dbc
-}
-.tag{
-display:inline-block;padding:4px 7px;border-radius:7px;
-margin:3px;background:#182641;font-size:11px
-}
-.backtest{
-border:1px solid #314b7a;
-background:linear-gradient(135deg,#111d35,#0e1628)
-}
-table{
-width:100%;border-collapse:collapse;font-size:13px
-}
-td,th{
-padding:9px 5px;
-border-bottom:1px solid #202c43;
-text-align:left
-}
-th{color:#91a2c4}
-@media(max-width:600px){
-.grid{grid-template-columns:repeat(2,1fr)}
-}
-</style>
-</head>
-
-<body>
-
-<header>
-<h1>⚽ 竞彩足球预测分析 V3.3</h1>
-<div class="sub">
-真实赛事 · 冷门雷达 · 历史回测 · 风险控制
-</div>
-</header>
-
-<main>
-
-<!-- 总览 -->
-
-<div class="card">
-
-<div class="grid">
-
-<div class="metric">
-今日比赛
-<b id="gameCount">—</b>
-<span class="muted">API-Football</span>
-</div>
-
-<div class="metric">
-历史样本
-<b>65,525</b>
-<span class="muted">历史数据库</span>
-</div>
-
-<div class="metric">
-系统状态
-<b id="status">等待</b>
-<span class="muted">Jarvis Engine</span>
-</div>
-
-<div class="metric">
-数据状态
-<b id="dataStatus">检查中</b>
-<span class="muted">API</span>
-</div>
-
-</div>
-
-<button class="primary" onclick="loadFootballData()">
-🔄 刷新今日比赛
-</button>
-
-</div>
-
-
-<!-- 9月历史回测 -->
+<!-- 2026年9月详细回测 V3.4 -->
 
 <div class="card backtest">
 
 <h2>🧪 2026年9月历史回测</h2>
 
 <div class="muted">
-测试区间：2026-09-01 ～ 2026-09-30
+2026-09-01 ～ 2026-09-30
 </div>
 
 <div class="grid" style="margin-top:10px">
 
 <div class="metric">
-比赛数量
+官方样本
+<b id="btSource">—</b>
+</div>
+
+<div class="metric">
+有效样本
 <b id="btGames">—</b>
 </div>
 
 <div class="metric">
-总体命中率
+总体命中
 <b id="btHit">—</b>
 </div>
 
 <div class="metric">
-平局命中率
+平局命中
 <b id="btDraw">—</b>
-</div>
-
-<div class="metric">
-冷门命中率
-<b id="btUpset">—</b>
 </div>
 
 </div>
@@ -180,7 +36,7 @@ th{color:#91a2c4}
 class="primary"
 onclick="runBacktest()">
 
-🧪 开始9月回测
+🧪 读取9月详细回测
 
 </button>
 
@@ -188,843 +44,315 @@ onclick="runBacktest()">
 id="backtestResult"
 class="signal">
 
-等待运行历史回测。
+等待读取……
+
+</div>
+
+<div
+id="backtestMatches"
+style="margin-top:12px">
 
 </div>
 
 </div>
-
-
-<!-- 冷门雷达 -->
-
-<div class="card hot">
-
-<h2>🔥 冷门大神雷达</h2>
-
-<div class="muted">
-外部预测仅用于交叉验证，不直接照抄。
-</div>
-
-<div class="grid" style="margin-top:10px">
-
-<div class="metric">
-平局指数
-<b id="drawIndex">—</b>
-</div>
-
-<div class="metric">
-让平指数
-<b id="handicapDraw">—</b>
-</div>
-
-<div class="metric">
-冷门指数
-<b id="upsetIndex">—</b>
-</div>
-
-<div class="metric">
-超级冷门
-<b id="superUpset">—</b>
-</div>
-
-</div>
-
-<div id="radarText" class="signal">
-选择比赛后生成冷门雷达。
-</div>
-
-</div>
-
-
-<!-- 今日比赛 -->
-
-<div class="card">
-
-<div class="row">
-<h2>🔥 今日真实比赛</h2>
-<span class="muted">API-Football</span>
-</div>
-
-<div id="matches">
-
-<div class="loading">
-正在读取比赛数据……
-</div>
-
-</div>
-
-</div>
-
-
-<!-- 当前分析 -->
-
-<div class="card">
-
-<h2>📊 当前比赛分析</h2>
-
-<div class="grid">
-
-<div class="metric">
-主胜
-<b id="homeP">—</b>
-</div>
-
-<div class="metric">
-平局
-<b id="drawP">—</b>
-</div>
-
-<div class="metric">
-客胜
-<b id="awayP">—</b>
-</div>
-
-<div class="metric">
-置信度
-<b id="confidence">—</b>
-</div>
-
-</div>
-
-<div id="decision" class="signal">
-选择比赛后开始分析。
-</div>
-
-</div>
-
-
-<!-- 风险 -->
-
-<div class="card">
-
-<h2>⚠️ 风险监控</h2>
-
-<div class="line">
-<span>平局风险</span>
-<b id="drawRisk">—</b>
-</div>
-
-<div class="line">
-<span>冷门风险</span>
-<b id="upsetRisk">—</b>
-</div>
-
-<div class="line">
-<span>大神一致率</span>
-<b id="consensus">待接入</b>
-</div>
-
-<div class="line">
-<span>证据等级</span>
-<b id="evidence">—</b>
-</div>
-
-</div>
-
-
-<!-- 引擎 -->
-
-<div class="card">
-
-<h2>🧠 分析引擎</h2>
-
-<div class="line">
-<span>ELO</span>
-<b>启用</b>
-</div>
-
-<div class="line">
-<span>Poisson</span>
-<b>启用</b>
-</div>
-
-<div class="line">
-<span>历史同赔</span>
-<b>接口</b>
-</div>
-
-<div class="line">
-<span>盘口异动</span>
-<b>接口</b>
-</div>
-
-<div class="line">
-<span>冷门雷达</span>
-<b>启用</b>
-</div>
-
-<div class="line">
-<span>风险闸门</span>
-<b>启用</b>
-</div>
-
-<div class="signal">
-证据不足或模型冲突时：
-<b>暂不推荐</b>
-</div>
-
-</div>
-
-</main>
-
 
 <script>
 
-/* =========================================
-基础变量
-========================================= */
+async function runBacktest(){
 
-let footballData=null;
+const result =
+document.getElementById(
+"backtestResult"
+);
 
+const list =
+document.getElementById(
+"backtestMatches"
+);
 
-/* =========================================
-读取今日比赛
-========================================= */
+result.innerHTML =
+"🔄 正在读取9月逐场数据……";
 
-async function loadFootballData(){
-
-const box=document.getElementById("matches");
-
-box.innerHTML=
-'<div class="loading">正在读取真实比赛数据……</div>';
-
-document.getElementById("status").textContent="读取中";
+list.innerHTML = "";
 
 try{
 
-const response=
+const response =
 await fetch(
-"data/api_football/today.json?"+Date.now()
+"data/backtest/2026-09.json?"+
+Date.now()
 );
 
 if(!response.ok){
 
 throw new Error(
-"HTTP "+response.status
+"HTTP "+
+response.status
 );
 
 }
 
-footballData=await response.json();
+const data =
+await response.json();
 
-const games=
-footballData.response || [];
+const rows =
+data.matches || [];
+
+document.getElementById(
+"btSource"
+).textContent =
+data.source_month_total ||
+"—";
+
+document.getElementById(
+"btGames"
+).textContent =
+data.valid_records ||
+rows.length;
+
+document.getElementById(
+"btHit"
+).textContent =
+data.hitRate === null ||
+data.hitRate === undefined
+?
+"—"
+:
+data.hitRate+"%";
+
+document.getElementById(
+"btDraw"
+).textContent =
+data.drawHitRate === null ||
+data.drawHitRate === undefined
+?
+"—"
+:
+data.drawHitRate+"%";
 
 
-document.getElementById("gameCount")
-.textContent=games.length;
+result.innerHTML =
 
-document.getElementById("dataStatus")
-.textContent="正常";
+"🟢 <b>9月详细回测已加载</b>"+
+"<br><br>"+
+"官方月度样本："+
+(data.source_month_total || "—")+
+"<br>"+
+"系统有效样本："+
+(data.valid_records || rows.length)+
+"<br>"+
+"总体命中率："+
+(
+data.hitRate == null
+?
+"—"
+:
+data.hitRate+"%"
+)+
+"<br>"+
+"平局命中率："+
+(
+data.drawHitRate == null
+?
+"—"
+:
+data.drawHitRate+"%"
+)+
+"<br><br>"+
+"<span class='muted'>"+
+"冷门指数暂不计算：当前没有真实赔率数据。"+
+"</span>";
 
-document.getElementById("status")
-.textContent="已加载";
 
+if(!rows.length){
 
-if(!games.length){
-
-box.innerHTML=
-'<div class="loading">今天没有读取到比赛。</div>';
+list.innerHTML =
+"<div class='signal'>"+
+"没有逐场记录。"+
+"</div>";
 
 return;
 
 }
 
-renderMatches(games);
 
-}catch(error){
-
-console.error(error);
-
-document.getElementById("dataStatus")
-.textContent="失败";
-
-document.getElementById("status")
-.textContent="错误";
-
-box.innerHTML=
-'<div class="signal bad">'+
-'无法读取 data/api_football/today.json'+
-'<br><br>'+
-'请确认 GitHub Actions 已成功运行。'+
-'</div>';
-
-}
-
-}
+const fragment =
+document.createDocumentFragment();
 
 
-/* =========================================
-显示比赛
-========================================= */
+rows.forEach(
+(row,index)=>{
 
-function renderMatches(games){
+const div =
+document.createElement(
+"div"
+);
 
-const box=
-document.getElementById("matches");
+div.className =
+"match";
 
-box.innerHTML="";
+const hit =
+row.hit === true;
 
-games.slice(0,30).forEach(
-(item,index)=>{
-
-const fixture=
-item.fixture || {};
-
-const teams=
-item.teams || {};
-
-const league=
-item.league || {};
-
-const home=
-teams.home?.name || "主队";
-
-const away=
-teams.away?.name || "客队";
-
-const leagueName=
-league.name || "未知联赛";
-
-const time=
-fixture.date
+const hitText =
+hit
 ?
-new Date(
-fixture.date
-).toLocaleTimeString(
-"zh-CN",
-{
-hour:"2-digit",
-minute:"2-digit"
-}
-)
+"✓ 命中"
 :
-"--:--";
+"✕ 未命中";
 
+const hitClass =
+hit
+?
+"good"
+:
+"bad";
 
-const div=
-document.createElement("div");
+const prediction =
+row.prediction || "—";
 
-div.className="match";
+const result =
+row.result || "—";
 
-div.innerHTML=`
+div.innerHTML = `
 
 <div class="league">
-${leagueName} · ${time}
+
+${escapeHtml(
+row.date || ""
+)}
+
+ ·
+
+${escapeHtml(
+row.league || "未知赛事"
+)}
+
 </div>
 
 <div class="row">
 
 <div class="team">
 
-${home}
+${escapeHtml(
+row.home || "主队"
+)}
 
 <br>
 
 <span class="muted">
-vs ${away}
+
+vs
+
+${escapeHtml(
+row.away || "客队"
+)}
+
 </span>
 
 </div>
 
-<span class="badge">
-真实数据
+<span class="badge ${hitClass}">
+
+${hitText}
+
 </span>
 
 </div>
 
-<button
-style="margin-top:10px;width:100%"
-onclick="analyzeMatch(${index})">
+<div
+class="signal"
+style="margin-top:8px">
 
-🧠 Jarvis + 冷门雷达分析
+<div class="line">
 
-</button>
+<span>预测</span>
+
+<b>${prediction}</b>
+
+</div>
+
+<div class="line">
+
+<span>实际赛果</span>
+
+<b>${result}</b>
+
+</div>
+
+<div class="line">
+
+<span>最终比分</span>
+
+<b>${escapeHtml(
+row.score || "—"
+)}</b>
+
+</div>
+
+<div class="line">
+
+<span>信心</span>
+
+<b>${
+row.confidence == null
+?
+"—"
+:
+escapeHtml(
+String(row.confidence)
+)
+}</b>
+
+</div>
+
+</div>
 
 `;
 
-box.appendChild(div);
+fragment.appendChild(
+div
+);
 
 });
 
-}
-
-
-/* =========================================
-单场分析
-========================================= */
-
-function analyzeMatch(index){
-
-const games=
-footballData?.response || [];
-
-const game=
-games[index];
-
-if(!game)return;
-
-
-const home=
-game.teams.home.name;
-
-const away=
-game.teams.away.name;
-
-
-/*
-当前基础模型。
-
-以后接入真实CSV、赔率、
-历史同赔以后替换。
-*/
-
-let homeP=0.48;
-
-let drawP=0.29;
-
-let awayP=0.23;
-
-let confidence=67;
-
-
-/* 风险 */
-
-const upsetRisk=
-Math.round(
-(1-Math.max(
-homeP,
-drawP,
-awayP
-))*100
+list.appendChild(
+fragment
 );
 
-const drawRisk=
-Math.round(drawP*100);
+}catch(error){
 
+console.error(error);
 
-/* 雷达 */
+result.innerHTML =
 
-const drawIndex=
-Math.min(
-95,
-Math.round(drawP*100+12)
-);
-
-const handicapDraw=
-Math.min(
-95,
-Math.round(drawP*100+8)
-);
-
-const superUpset=
-Math.min(
-95,
-Math.max(
-0,
-upsetRisk-20
-)
-);
-
-
-/* 显示 */
-
-document.getElementById("homeP")
-.textContent=
-Math.round(homeP*100)+"%";
-
-document.getElementById("drawP")
-.textContent=
-Math.round(drawP*100)+"%";
-
-document.getElementById("awayP")
-.textContent=
-Math.round(awayP*100)+"%";
-
-document.getElementById("confidence")
-.textContent=
-confidence+"%";
-
-
-document.getElementById("drawRisk")
-.textContent=
-drawRisk+"%";
-
-document.getElementById("upsetRisk")
-.textContent=
-upsetRisk+"%";
-
-document.getElementById("evidence")
-.textContent=
-confidence>=70
-?
-"强"
-:
-confidence>=60
-?
-"中"
-:
-"弱";
-
-
-document.getElementById("drawIndex")
-.textContent=
-drawIndex;
-
-document.getElementById("handicapDraw")
-.textContent=
-handicapDraw;
-
-document.getElementById("upsetIndex")
-.textContent=
-upsetRisk;
-
-document.getElementById("superUpset")
-.textContent=
-superUpset;
-
-
-/* 判断 */
-
-let decision;
-
-if(confidence<65){
-
-decision="⚪ 暂不推荐：证据不足";
-
-}else if(
-drawP===Math.max(
-homeP,
-drawP,
-awayP
-)){
-
-decision="🟡 平局候选：谨慎观察";
-
-}else if(upsetRisk>=70){
-
-decision=
-"💣 超级冷门风险：不要强行追正路";
-
-}else if(upsetRisk>=55){
-
-decision=
-"🔴 冷门风险：重点复核";
-
-}else{
-
-decision=
-"🟢 当前主选："+home;
-
-}
-
-
-document.getElementById("decision")
-.innerHTML=
-decision+
+"🔴 <b>读取失败</b>"+
 "<br><br>"+
-"<span class='muted'>"+
-home+" vs "+away+
-"</span>";
-
-
-let radar="当前："+decision;
-
-if(drawIndex>=60)
-radar+="<br><span class='tag'>平局关注</span>";
-
-if(handicapDraw>=60)
-radar+="<span class='tag'>让平关注</span>";
-
-if(upsetRisk>=55)
-radar+="<span class='tag'>冷门预警</span>";
-
-if(superUpset>=60)
-radar+="<span class='tag'>超级冷门</span>";
-
-
-radar+=
+escapeHtml(
+error.message
+)+
 "<br><br>"+
-"<span class='muted'>"+
-"公开大神数据尚未接入，因此不虚构一致率。"+
-"</span>";
-
-
-document.getElementById("radarText")
-.innerHTML=radar;
-
-}
-
-
-/* =========================================
-9月历史回测
-========================================= */
-
-async function runBacktest(){
-
-const result=
-document.getElementById("backtestResult");
-
-result.innerHTML=
-"🧪 正在读取2026年9月历史数据……";
-
-
-/*
-优先尝试几个常见数据路径。
-如果未来GitHub Actions把历史数据放入这些路径，
-网页可以自动读取。
-*/
-
-const sources=[
-
-"data/backtest/2026-09.json",
-
-"data/backtest/september_2026.json",
-
-"data/history/2026-09.json",
-
-"data/nerdytips/2026-09.json"
-
-];
-
-
-let data=null;
-
-
-for(const url of sources){
-
-try{
-
-const response=
-await fetch(
-url+"?"+Date.now()
-);
-
-if(response.ok){
-
-data=await response.json();
-
-break;
-
-}
-
-}catch(e){}
-
-}
-
-
-/*
-目前没有真实9月逐场数据，
-不能虚构回测结果。
-*/
-
-if(!data){
-
-document.getElementById("btGames")
-.textContent="待导入";
-
-document.getElementById("btHit")
-.textContent="—";
-
-document.getElementById("btDraw")
-.textContent="—";
-
-document.getElementById("btUpset")
-.textContent="—";
-
-
-result.innerHTML=
-
-"⚪ <b>暂无9月逐场数据</b><br><br>"+
-"回测模块已经准备完成，但当前仓库还没有 "+
-"2026年9月逐场历史数据。<br><br>"+
-"系统不会使用官方总体统计冒充Jarvis命中率。";
-
-return;
-
-}
-
-
-/* =========================
-如果以后数据进入系统
-========================= */
-
-const rows=
-Array.isArray(data)
-?
-data
-:
-data.matches || [];
-
-
-if(!rows.length){
-
-result.innerHTML=
-"⚪ 找到数据文件，但没有逐场记录。";
-
-return;
-
-}
-
-
-let total=0;
-
-let hit=0;
-
-let draws=0;
-
-let drawHit=0;
-
-let upset=0;
-
-let upsetHit=0;
-
-
-rows.forEach(row=>{
-
-total++;
-
-
-/*
-兼容常见字段：
-
-prediction
-result
-actual
-outcome
-type
-*/
-
-const prediction=
-String(
-row.prediction ||
-row.pick ||
-row.tip ||
-""
-).toLowerCase();
-
-
-const actual=
-String(
-row.result ||
-row.actual ||
-row.outcome ||
-""
-).toLowerCase();
-
-
-if(
-prediction &&
-actual &&
-prediction===actual
-){
-
-hit++;
-
-}
-
-
-if(
-prediction.includes("draw") ||
-prediction.includes("平")
-){
-
-draws++;
-
-if(
-actual.includes("draw") ||
-actual.includes("平")
-){
-
-drawHit++;
+"请确认 GitHub Actions 已经绿色完成。";
 
 }
 
 }
 
 
-if(
-row.upset===true ||
-Number(row.upsetIndex||0)>=55
-){
+function escapeHtml(value){
 
-upset++;
+return String(value)
 
-if(
-prediction &&
-actual &&
-prediction===actual
-){
+.replaceAll("&","&amp;")
 
-upsetHit++;
+.replaceAll("<","&lt;")
 
-}
+.replaceAll(">","&gt;")
+
+.replaceAll('"',"&quot;")
+
+.replaceAll("'","&#039;");
 
 }
-
-});
-
-
-const hitRate=
-total
-?
-(hit/total*100).toFixed(1)
-:
-0;
-
-const drawRate=
-draws
-?
-(drawHit/draws*100).toFixed(1)
-:
-0;
-
-const upsetRate=
-upset
-?
-(upsetHit/upset*100).toFixed(1)
-:
-0;
-
-
-document.getElementById("btGames")
-.textContent=total;
-
-document.getElementById("btHit")
-.textContent=
-hitRate+"%";
-
-document.getElementById("btDraw")
-.textContent=
-drawRate+"%";
-
-document.getElementById("btUpset")
-.textContent=
-upsetRate+"%";
-
-
-result.innerHTML=
-
-"🟢 <b>9月回测完成</b><br><br>"+
-
-"总比赛："+total+"<br>"+
-
-"总体命中率："+hitRate+"%<br>"+
-
-"平局命中率："+drawRate+"%<br>"+
-
-"冷门命中率："+upsetRate+"%";
-
-}
-
-
-/* =========================================
-启动
-========================================= */
-
-loadFootballData();
 
 </script>
-
-</body>
-</html>
