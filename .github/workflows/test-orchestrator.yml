@@ -21,55 +21,250 @@ jobs:
       - name: Install requests
         run: pip install requests
 
-      - name: Get API-Football data
+      - name: Get football data
         env:
           API_FOOTBALL_KEY: ${{ secrets.API_FOOTBALL_KEY }}
         run: |
           python - <<'PY'
           import os
-          import requests
           import json
-          from datetime import datetime
+          import requests
+          from datetime import datetime, timedelta, timezone
 
-          key = os.environ["API_FOOTBALL_KEY"]
+          # =========================
+          # 中国时间
+          # =========================
+          tz = timezone(timedelta(hours=8))
+          today = datetime.now(tz).strftime("%Y-%m-%d")
 
-          url = "https://v3.football.api-sports.io/fixtures"
-
-          headers = {
-              "x-apisports-key": key
+          output = {
+              "success": False,
+              "source": None,
+              "date": today,
+              "response": [],
+              "errors": []
           }
 
-          params = {
-              "date": datetime.utcnow().strftime("%Y-%m-%d")
-          }
+          # =========================
+          # 方案一：API-Football
+          # =========================
+          key = os.environ.get("API_FOOTBALL_KEY", "").strip()
 
-          r = requests.get(
-              url,
-              headers=headers,
-              params=params,
-              timeout=30
+          if key:
+              try:
+                  print("Trying API-Football...")
+
+                  url = "https://v3.football.api-sports.io/fixtures"
+
+                  headers = {
+                      "x-apisports-key": key
+                  }
+
+                  params = {
+                      "date": today
+                  }
+
+                  r = requests.get(
+                      url,
+                      headers=headers,
+                      params=params,
+                      timeout=30
+                  )
+
+                  print("API-Football HTTP:", r.status_code)
+
+                  if r.status_code == 200:
+                      data = r.json()
+
+                      output["success"] = True
+                      output["source"] = "api-football"
+                      output["response"] = data.get("response", [])
+
+                      print(
+                          "API-Football OK:",
+                          len(output["response"]),
+                          "fixtures"
+                      )
+
+                  else:
+                      output["errors"].append(
+                          f"API-Football HTTP {r.status_code}"
+                      )
+
+              except Exception as e:
+                  output["errors"].append(
+                      f"API-Football error: {str(e)}"
+                  )
+
+          else:
+              output["errors"].append(
+                  "API_FOOTBALL_KEY not configured"
+              )
+
+          # =========================
+          # 方案二：SofaScore 备用
+          # =========================
+          if not output["success"]:
+
+              try:
+                  print("Trying SofaScore fallback...")
+
+                  url = (
+                      "https://www.sofascore.com/api/v1/"
+                      f"sport/football/scheduled-events/{today}"
+                  )
+
+                  r = requests.get(
+                      url,
+                      headers={
+                          "User-Agent":
+                          "Mozilla/5.0 "
+                          "(GitHub Actions; Jarvis Football AI)"
+                      },
+                      timeout=30
+                  )
+
+                  print("SofaScore HTTP:", r.status_code)
+
+                  if r.status_code == 200:
+                      data = r.json()
+
+                      events = data.get("events", [])
+
+                      normalized = []
+
+                      for event in events:
+
+                          home = event.get(
+                              "homeTeam", {}
+                          )
+
+                          away = event.get(
+                              "awayTeam", {}
+                          )
+
+                          tournament = event.get(
+                              "tournament", {}
+                          )
+
+                          category = tournament.get(
+                              "category", {}
+                          )
+
+                          normalized.append({
+                              "fixture": {
+                                  "id": event.get("id"),
+                                  "date": (
+                                      datetime.fromtimestamp(
+                                          event.get(
+                                              "startTimestamp", 0
+                                          ),
+                                          tz=timezone.utc
+                                      ).isoformat()
+                                  ),
+                                  "status": {
+                                      "short":
+                                      event.get(
+                                          "status", {}
+                                      ).get("type")
+                                  }
+                              },
+
+                              "league": {
+                                  "id":
+                                  tournament.get("uniqueTournament", {}).get(
+                                      "id"
+                                  ),
+                                  "name":
+                                  tournament.get("name"),
+                                  "country": {
+                                      "name":
+                                      category.get("name")
+                                  }
+                              },
+
+                              "teams": {
+                                  "home": {
+                                      "id":
+                                      home.get("id"),
+                                      "name":
+                                      home.get("name"),
+                                      "shortName":
+                                      home.get("shortName")
+                                  },
+
+                                  "away": {
+                                      "id":
+                                      away.get("id"),
+                                      "name":
+                                      away.get("name"),
+                                      "shortName":
+                                      away.get("shortName")
+                                  }
+                              }
+                          })
+
+                      output["success"] = True
+                      output["source"] = "sofascore"
+                      output["response"] = normalized
+
+                      print(
+                          "SofaScore OK:",
+                          len(normalized),
+                          "fixtures"
+                      )
+
+                  else:
+                      output["errors"].append(
+                          f"SofaScore HTTP {r.status_code}"
+                      )
+
+              except Exception as e:
+                  output["errors"].append(
+                      f"SofaScore error: {str(e)}"
+                  )
+
+          # =========================
+          # 最终兜底
+          # =========================
+          if not output["success"]:
+              print(
+                  "WARNING: all data sources failed."
+              )
+
+              # 不让 GitHub Actions 失败
+              # 保证网页至少可以正常读取 JSON
+              output["source"] = "empty-fallback"
+
+          # =========================
+          # 写入 JSON
+          # =========================
+          os.makedirs(
+              "data/api_football",
+              exist_ok=True
           )
-
-          r.raise_for_status()
-
-          data = r.json()
-
-          print("API-Football connection OK")
-          print("Fixtures:", len(data.get("response", [])))
-
-          os.makedirs("data/api_football", exist_ok=True)
 
           with open(
               "data/api_football/today.json",
               "w",
               encoding="utf-8"
           ) as f:
+
               json.dump(
-                  data,
+                  output,
                   f,
                   ensure_ascii=False,
                   indent=2
               )
+
+          print("==============================")
+          print("Jarvis Football AI")
+          print("Date:", today)
+          print("Source:", output["source"])
+          print("Fixtures:", len(output["response"]))
+          print("Success:", output["success"])
+          print("Errors:", output["errors"])
+          print("==============================")
           PY
 
       - name: Commit football data
@@ -79,7 +274,9 @@ jobs:
 
           git add data/api_football/today.json
 
-          git diff --cached --quiet || \
-          git commit -m "Update football API data"
-
-          git push
+          if git diff --cached --quiet; then
+            echo "No data changes."
+          else
+            git commit -m "Update football data"
+            git push
+          fi
