@@ -1,12 +1,10 @@
-name: September 2026 Backtest
+name: September 2026 Backtest V3.4
 
 on:
   workflow_dispatch:
   push:
     paths:
       - ".github/workflows/september-backtest.yml"
-  schedule:
-    - cron: "20 2 * * *"
 
 permissions:
   contents: write
@@ -24,19 +22,22 @@ jobs:
         with:
           python-version: "3.12"
 
-      - name: Install dependencies
+      - name: Install
         run: |
           python -m pip install --upgrade pip
-          pip install pandas openpyxl
+          pip install pandas openpyxl requests
 
-      - name: Download NerdyTips history
+      - name: Download official history
         run: |
           mkdir -p /tmp/jarvis
-          curl -L --fail \
-            "https://raw.githubusercontent.com/Dani-Ionescu/nerdytips-data/main/allMatches.xlsx" \
+
+          curl -L --retry 5 --retry-delay 3 --fail \
+            "https://github.com/Dani-Ionescu/nerdytips-data/raw/refs/heads/main/allMatches.xlsx" \
             -o /tmp/jarvis/allMatches.xlsx
 
-      - name: Build September JSON
+          ls -lh /tmp/jarvis/allMatches.xlsx
+
+      - name: Parse September 2026
         run: |
           python <<'PY'
           import json
@@ -44,37 +45,83 @@ jobs:
           from pathlib import Path
           import pandas as pd
 
-          src = "/tmp/jarvis/allMatches.xlsx"
-          out = Path("data/backtest/2026-09.json")
+          FILE = "/tmp/jarvis/allMatches.xlsx"
+          OUT = Path("data/backtest/2026-09.json")
 
-          def norm(x):
-              return re.sub(r"[^a-z0-9]+", "", str(x).lower())
+          def clean(v):
+              if pd.isna(v):
+                  return ""
+              return str(v).strip()
 
-          def find_col(columns, keys):
+          def norm(v):
+              return re.sub(
+                  r"[^a-z0-9\u4e00-\u9fff]+",
+                  "",
+                  clean(v).lower()
+              )
+
+          def find_col(columns, candidates):
               best = None
-              best_score = 0
+              score_best = 0
 
-              for c in columns:
-                  n = norm(c)
+              for col in columns:
+                  n = norm(col)
                   score = 0
 
-                  for key in keys:
-                      k = norm(key)
+                  for c in candidates:
+                      cc = norm(c)
 
-                      if k in n:
-                          score += len(k) + 5
+                      if n == cc:
+                          score += 100
 
-                  if score > best_score:
-                      best_score = score
-                      best = c
+                      elif cc in n:
+                          score += len(cc)
+
+                  if score > score_best:
+                      score_best = score
+                      best = col
 
               return best
 
-          def score_to_result(value):
-              s = str(value).strip()
+          def parse_date_series(series):
 
+              # 第一种：正常日期
+              result = pd.to_datetime(
+                  series,
+                  errors="coerce"
+              )
+
+              # 第二种：从字符串中提取 YYYY-MM-DD
+              missing = result.isna()
+
+              if missing.any():
+
+                  extracted = (
+                      series.astype(str)
+                      .str.extract(
+                          r"(\d{4}-\d{1,2}-\d{1,2})",
+                          expand=False
+                      )
+                  )
+
+                  result.loc[missing] = pd.to_datetime(
+                      extracted.loc[missing],
+                      errors="coerce"
+                  )
+
+              return result
+
+          def result_from_score(value):
+
+              s = clean(value)
+
+              # 支持：
+              # 2-1
+              # 2 : 1
+              # 2–1
+              # 2 1
               m = re.search(
-                  r"(\d+)\s*[-:]\s*(\d+)",
+                  r"(\d+)\s*[-:–]\s*(\d+)",
                   s
               )
 
@@ -92,57 +139,79 @@ jobs:
 
               return "2"
 
-          def normalize_prediction(value):
-              s = str(value).strip().lower()
+          def normalize_result(value):
 
-              if not s or s in {
-                  "nan",
-                  "none",
-                  "null"
-              }:
-                  return ""
+              s = clean(value).lower()
 
-              if re.fullmatch(r"[12x]", s):
-                  return s.upper()
-
-              if "draw" in s or "tie" in s:
-                  return "X"
-
-              if "平" in s:
-                  return "X"
-
-              if "home" in s or "主胜" in s:
+              if s in ["1", "home", "homewin", "主胜"]:
                   return "1"
 
-              if "away" in s or "客胜" in s:
+              if s in ["x", "draw", "tie", "平", "平局"]:
+                  return "X"
+
+              if s in ["2", "away", "awaywin", "客胜"]:
                   return "2"
+
+              score_result = result_from_score(value)
+
+              return score_result
+
+          def normalize_prediction(value):
+
+              s = clean(value).lower()
+
+              if not s:
+                  return ""
+
+              # 只接受明确的1X2
+              if s in ["1", "home", "homewin", "主胜"]:
+                  return "1"
+
+              if s in ["x", "draw", "tie", "平", "平局"]:
+                  return "X"
+
+              if s in ["2", "away", "awaywin", "客胜"]:
+                  return "2"
+
+              # 某些数据可能是 "1X"
+              if s == "1x":
+                  return "1X"
+
+              if s == "x2":
+                  return "X2"
 
               return ""
 
-          print("读取 NerdyTips 历史数据...")
+          print("读取官方 Excel")
 
-          book = pd.ExcelFile(src)
+          book = pd.ExcelFile(FILE)
+
+          print("工作表:", book.sheet_names)
 
           frames = []
 
           for sheet in book.sheet_names:
-              try:
-                  frames.append(
-                      pd.read_excel(
-                          src,
-                          sheet_name=sheet
-                      )
-                  )
-              except Exception as e:
-                  print(
-                      "跳过工作表:",
-                      sheet,
-                      e
-                  )
+
+              df = pd.read_excel(
+                  FILE,
+                  sheet_name=sheet
+              )
+
+              if len(df) == 0:
+                  continue
+
+              print(
+                  "Sheet:",
+                  sheet,
+                  "rows:",
+                  len(df)
+              )
+
+              frames.append(df)
 
           if not frames:
               raise RuntimeError(
-                  "没有读取到 Excel 数据"
+                  "Excel没有有效数据"
               )
 
           df = pd.concat(
@@ -151,11 +220,11 @@ jobs:
           )
 
           df.columns = [
-              str(c).strip()
+              clean(c)
               for c in df.columns
           ]
 
-          print("发现字段:")
+          print("字段:")
           print(list(df.columns))
 
           date_col = find_col(
@@ -165,7 +234,40 @@ jobs:
                   "matchdate",
                   "fixturedate",
                   "kickoff",
-                  "datetime"
+                  "datetime",
+                  "日期",
+                  "比赛日期"
+              ]
+          )
+
+          home_col = find_col(
+              df.columns,
+              [
+                  "home",
+                  "hometeam",
+                  "home team",
+                  "主队"
+              ]
+          )
+
+          away_col = find_col(
+              df.columns,
+              [
+                  "away",
+                  "awayteam",
+                  "away team",
+                  "客队"
+              ]
+          )
+
+          league_col = find_col(
+              df.columns,
+              [
+                  "league",
+                  "competition",
+                  "tournament",
+                  "联赛",
+                  "赛事"
               ]
           )
 
@@ -177,7 +279,19 @@ jobs:
                   "tip",
                   "pick",
                   "forecast",
-                  "mainprediction"
+                  "mainprediction",
+                  "预测"
+              ]
+          )
+
+          score_col = find_col(
+              df.columns,
+              [
+                  "score",
+                  "finalscore",
+                  "final result",
+                  "比分",
+                  "最终比分"
               ]
           )
 
@@ -185,10 +299,11 @@ jobs:
               df.columns,
               [
                   "result",
+                  "outcome",
+                  "actual",
                   "finalresult",
-                  "score",
-                  "finalscore",
-                  "outcome"
+                  "赛果",
+                  "结果"
               ]
           )
 
@@ -196,81 +311,72 @@ jobs:
               df.columns,
               [
                   "confidence",
+                  "confidence score",
                   "trust",
-                  "rating"
+                  "rating",
+                  "信心"
               ]
           )
 
+          print("date =", date_col)
+          print("home =", home_col)
+          print("away =", away_col)
+          print("league =", league_col)
+          print("prediction =", prediction_col)
+          print("score =", score_col)
+          print("result =", result_col)
+          print("confidence =", confidence_col)
+
           if not date_col:
               raise RuntimeError(
-                  "无法识别比赛日期字段"
+                  "找不到日期字段"
               )
 
-          if not prediction_col:
-              raise RuntimeError(
-                  "无法识别预测字段"
-              )
-
-          if not result_col:
-              raise RuntimeError(
-                  "无法识别最终结果字段"
-              )
-
-          print(
-              "日期字段:",
-              date_col
+          dates = parse_date_series(
+              df[date_col]
           )
 
-          print(
-              "预测字段:",
-              prediction_col
-          )
-
-          print(
-              "结果字段:",
-              result_col
-          )
-
-          dates = pd.to_datetime(
-              df[date_col],
-              errors="coerce"
-          )
-
-          start = pd.Timestamp(
-              "2026-09-01"
-          )
-
-          end = pd.Timestamp(
-              "2026-09-30 23:59:59"
-          )
-
-          df = df[
-              (dates >= start)
+          # 关键修复：
+          # 不再依赖错误的日期解析方式
+          mask = (
+              (dates >= pd.Timestamp("2026-09-01"))
               &
-              (dates <= end)
-          ].copy()
+              (dates < pd.Timestamp("2026-10-01"))
+          )
 
-          df["__date"] = dates[
-              df.index
-          ]
+          df = df.loc[mask].copy()
+          df["__date"] = dates.loc[mask]
+
+          print(
+              "2026年9月原始记录:",
+              len(df)
+          )
 
           rows = []
 
-          for _, row in df.iterrows():
+          for _, r in df.iterrows():
 
-              prediction = normalize_prediction(
-                  row[prediction_col]
-              )
+              prediction = ""
 
-              actual = score_to_result(
-                  row[result_col]
-              )
-
-              if not actual:
-                  actual = normalize_prediction(
-                      row[result_col]
+              if prediction_col:
+                  prediction = normalize_prediction(
+                      r[prediction_col]
                   )
 
+              actual = ""
+
+              if score_col:
+                  actual = normalize_result(
+                      r[score_col]
+                  )
+
+              if not actual and result_col:
+                  actual = normalize_result(
+                      r[result_col]
+                  )
+
+              # 没有明确预测和赛果的记录，
+              # 不进入命中率计算
               if not prediction or not actual:
                   continue
 
@@ -279,53 +385,60 @@ jobs:
               if confidence_col:
 
                   try:
+                      raw = clean(
+                          r[confidence_col]
+                      )
 
-                      raw = str(
-                          row[confidence_col]
-                      ).replace(
-                          "%",
-                          ""
-                      ).replace(
-                          "/10",
-                          ""
-                      ).strip()
+                      raw = (
+                          raw.replace("%", "")
+                          .replace("/10", "")
+                      )
 
                       confidence = float(raw)
-
-                      if confidence > 10:
-                          confidence /= 10
-
-                      if confidence <= 1:
-                          confidence *= 10
 
                   except Exception:
                       confidence = None
 
-              # 这里只做“冷门代理指数”
-              # 不冒充博彩公司赔率冷门指数
-              if confidence is None:
+              home = (
+                  clean(r[home_col])
+                  if home_col
+                  else ""
+              )
 
-                  upset_index = 50
+              away = (
+                  clean(r[away_col])
+                  if away_col
+                  else ""
+              )
 
-              else:
+              league = (
+                  clean(r[league_col])
+                  if league_col
+                  else ""
+              )
 
-                  upset_index = round(
-                      max(
-                          0,
-                          min(
-                              100,
-                              100 -
-                              confidence * 10
-                          )
-                      )
-                  )
+              score = (
+                  clean(r[score_col])
+                  if score_col
+                  else ""
+              )
+
+              hit = (
+                  prediction == actual
+              )
 
               rows.append({
 
                   "date":
-                      row["__date"].strftime(
+                      r["__date"].strftime(
                           "%Y-%m-%d"
                       ),
+
+                  "league": league,
+
+                  "home": home,
+
+                  "away": away,
 
                   "prediction":
                       prediction,
@@ -333,102 +446,142 @@ jobs:
                   "result":
                       actual,
 
+                  "score": score,
+
                   "confidence":
                       confidence,
 
-                  "upsetIndex":
-                      upset_index,
+                  "hit": hit
 
-                  "upset":
-                      upset_index >= 55
               })
+
+          print(
+              "有效逐场记录:",
+              len(rows)
+          )
+
+          # ==============================
+          # 去重
+          # ==============================
+
+          unique = {}
+
+          for r in rows:
+
+              key = (
+                  r["date"],
+                  r["league"],
+                  r["home"],
+                  r["away"],
+                  r["prediction"],
+                  r["score"]
+              )
+
+              unique[key] = r
+
+          rows = list(
+              unique.values()
+          )
+
+          print(
+              "去重后:",
+              len(rows)
+          )
 
           total = len(rows)
 
           hit = sum(
-              x["prediction"]
-              ==
-              x["result"]
-              for x in rows
+              1
+              for r in rows
+              if r["hit"]
           )
 
           draw_rows = [
-              x for x in rows
-              if x["prediction"] == "X"
+              r for r in rows
+              if r["prediction"] == "X"
           ]
 
           draw_hit = sum(
-              x["result"] == "X"
-              for x in draw_rows
+              1
+              for r in draw_rows
+              if r["hit"]
           )
 
-          upset_rows = [
-              x for x in rows
-              if x["upset"]
-          ]
+          def rate(a, b):
 
-          upset_hit = sum(
-              x["prediction"]
-              ==
-              x["result"]
-              for x in upset_rows
-          )
-
-          def pct(a, b):
-
-              if not b:
+              if b == 0:
                   return None
 
               return round(
                   a / b * 100,
-                  1
+                  2
               )
+
+          # ==============================
+          # 冷门暂时不伪造
+          # ==============================
+
+          # 没有真实欧赔/竞彩赔率，
+          # 不把 confidence 伪装成冷门指数
+          upset_rows = []
 
           payload = {
 
+              "version": "3.4",
+
               "source":
-                  "NerdyTips public historical archive",
+                  "NerdyTips official public archive",
 
               "period":
                   "2026-09",
 
-              "total":
+              "source_month_total":
+                  9071,
+
+              "parsed_records":
+                  len(df),
+
+              "valid_records":
                   total,
 
+              "hit":
+                  hit,
+
               "hitRate":
-                  pct(hit, total),
+                  rate(hit, total),
 
               "drawTotal":
                   len(draw_rows),
 
+              "drawHit":
+                  draw_hit,
+
               "drawHitRate":
-                  pct(
+                  rate(
                       draw_hit,
                       len(draw_rows)
                   ),
 
-              "upsetTotal":
-                  len(upset_rows),
+              "upsetTotal": 0,
 
-              "upsetHitRate":
-                  pct(
-                      upset_hit,
-                      len(upset_rows)
-                  ),
+              "upsetHit": 0,
 
-              "upsetDefinition":
-                  "Confidence-based proxy, not bookmaker odds",
+              "upsetHitRate": None,
+
+              "upsetStatus":
+                  "需要真实赔率数据",
 
               "matches":
                   rows
+
           }
 
-          out.parent.mkdir(
+          OUT.parent.mkdir(
               parents=True,
               exist_ok=True
           )
 
-          out.write_text(
+          OUT.write_text(
               json.dumps(
                   payload,
                   ensure_ascii=False,
@@ -438,39 +591,44 @@ jobs:
           )
 
           print("")
-          print("========== 9月回测 ==========")
+          print("============================")
+          print("2026年9月回测")
+          print("============================")
           print(
-              "比赛:",
+              "官方月度预测:",
+              9071
+          )
+          print(
+              "读取记录:",
+              len(df)
+          )
+          print(
+              "有效逐场:",
               total
           )
           print(
-              "总体:",
-              payload["hitRate"],
-              "%"
+              "命中:",
+              hit
+          )
+          print(
+              "命中率:",
+              payload["hitRate"]
           )
           print(
               "平局:",
-              payload["drawHitRate"],
-              "%"
+              payload["drawHitRate"]
           )
-          print(
-              "冷门代理:",
-              payload["upsetHitRate"],
-              "%"
-          )
-          print("==============================")
+          print("============================")
           PY
 
-      - name: Save backtest result
+      - name: Save result
         run: |
           git config user.name "jarvis-backtest"
           git config user.email "actions@github.com"
 
           git add data/backtest/2026-09.json
 
-          if git diff --cached --quiet; then
-            echo "没有新的数据变化"
-          else
-            git commit -m "Add September 2026 historical backtest"
-            git push
-          fi
+          git diff --cached --quiet || \
+          git commit -m "Fix September 2026 detailed backtest"
+
+          git push
