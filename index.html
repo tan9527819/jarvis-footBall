@@ -3,51 +3,82 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
-<title>竞彩足球预测分析 V4.0</title>
+<title>竞彩足球AI预测分析</title>
 
 <style>
 *{box-sizing:border-box}
-html,body{margin:0;padding:0;background:#070d19;color:#eef3ff;font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",Arial,sans-serif}
+html,body{
+  margin:0;
+  padding:0;
+  background:#070d19;
+  color:#eef3ff;
+  font-family:-apple-system,BlinkMacSystemFont,"PingFang SC",
+  "Microsoft YaHei",Arial,sans-serif;
+}
 body{padding-bottom:78px}
 button{font:inherit}
-.wrap{max-width:980px;margin:auto;padding:0 12px 30px}
+
+.wrap{
+  max-width:980px;
+  margin:auto;
+  padding:0 12px 30px;
+}
 
 .hero{
   margin:0 -12px 18px;
-  padding:30px 20px 26px;
-  background:linear-gradient(135deg,#172d62,#0c1732);
+  padding:28px 20px;
+  background:linear-gradient(135deg,#172f66,#0c1833);
   border-radius:0 0 28px 28px;
 }
-.hero h1{margin:0;font-size:27px;line-height:1.35}
-.hero p{margin:9px 0 0;color:#aab8d6;font-size:15px}
+
+.hero h1{
+  margin:0;
+  font-size:27px;
+}
+
+.hero p{
+  margin:8px 0 0;
+  color:#aab9d7;
+  font-size:14px;
+}
 
 .card{
   background:#101a2d;
   border:1px solid #294570;
-  border-radius:22px;
-  padding:20px;
-  margin-bottom:16px;
-  box-shadow:0 8px 30px rgba(0,0,0,.15)
+  border-radius:21px;
+  padding:19px;
+  margin-bottom:15px;
 }
 
-h2{margin:0 0 14px;font-size:21px}
-h3{margin:0 0 10px}
+h2{
+  margin:0 0 14px;
+  font-size:20px;
+}
 
-.muted{color:#92a2c2;line-height:1.75}
-.small{font-size:13px;color:#7f90b2}
+h3{
+  margin:0 0 10px;
+}
+
+.muted{
+  color:#91a2c2;
+  line-height:1.75;
+}
 
 .btn{
   width:100%;
   border:0;
-  border-radius:15px;
-  padding:15px;
-  margin-top:12px;
-  color:white;
+  border-radius:14px;
+  padding:14px;
+  margin-top:11px;
+  color:#fff;
   background:#587ff2;
   font-weight:700;
-  font-size:16px;
 }
-.btn:active{opacity:.75}
+
+.btn.secondary{
+  background:#172844;
+  border:1px solid #304a76;
+}
 
 .page{display:none}
 .page.active{display:block}
@@ -57,50 +88,46 @@ h3{margin:0 0 10px}
   left:0;
   right:0;
   bottom:0;
+  height:78px;
   z-index:100;
-  height:76px;
   display:flex;
   justify-content:center;
   background:#080e1e;
   border-top:1px solid #263858;
-  padding-bottom:env(safe-area-inset-bottom)
 }
 
 .nav button{
   flex:1;
-  max-width:180px;
+  max-width:190px;
   border:0;
   background:transparent;
   color:#7f8eac;
   font-size:12px;
-  padding:8px 2px;
 }
 
-.nav button.active{color:#58d8ff}
+.nav button.active{color:#5bdcff}
 
 .match{
   background:#0b1527;
   border:1px solid #263e67;
-  border-radius:18px;
-  padding:16px;
-  margin-top:12px
+  border-radius:17px;
+  padding:15px;
+  margin-top:12px;
 }
 
 .match-top{
   display:flex;
   justify-content:space-between;
   color:#8999b9;
-  font-size:13px
+  font-size:13px;
 }
 
 .teams{
   display:grid;
-  grid-template-columns:1fr 50px 1fr;
+  grid-template-columns:1fr 42px 1fr;
   align-items:center;
-  gap:6px;
-  margin:18px 0;
-  font-size:17px;
-  font-weight:700
+  margin:17px 0;
+  font-weight:700;
 }
 
 .team-right{text-align:right}
@@ -109,73 +136,110 @@ h3{margin:0 0 10px}
 .result{
   display:grid;
   grid-template-columns:repeat(3,1fr);
-  gap:8px
+  gap:8px;
 }
 
 .result button{
+  padding:10px 4px;
+  border-radius:11px;
   border:1px solid #304a76;
-  border-radius:12px;
-  padding:11px 4px;
-  color:#dfe8ff;
-  background:#162540
+  background:#162540;
+  color:#e4ecff;
 }
 
-.result button:active{background:#294477}
-
 .analysis{
-  margin-top:14px;
+  margin-top:13px;
   background:#0a1324;
-  border-radius:15px;
-  padding:16px;
+  border-radius:14px;
+  padding:15px;
   color:#b9c6dd;
-  line-height:1.8
+  line-height:1.8;
+}
+
+.analysis strong{color:#eef3ff}
+
+.record{
+  border-left:3px solid #587ff2;
+  padding-left:12px;
+  margin-top:14px;
+}
+
+.record-title{
+  font-weight:700;
+  margin-bottom:5px;
 }
 
 .tag{
   display:inline-block;
-  margin:3px;
-  padding:5px 9px;
-  border-radius:20px;
+  padding:4px 8px;
+  margin:2px;
+  border-radius:15px;
   background:#172d54;
-  color:#71a2ff;
-  font-size:12px
+  color:#72a2ff;
+  font-size:12px;
+}
+
+.win{color:#55dc98}
+.draw{color:#ffd166}
+.loss{color:#ff7070}
+
+.empty{
+  text-align:center;
+  padding:32px 8px;
+  color:#7585a4;
 }
 
 .stat{
   display:grid;
   grid-template-columns:1fr 1fr;
-  gap:10px
+  gap:10px;
 }
 
 .stat-box{
   background:#091224;
-  border-radius:15px;
-  padding:15px
+  border-radius:14px;
+  padding:14px;
 }
 
-.stat-box span{color:#8495b7;font-size:13px}
-.stat-box strong{display:block;margin-top:7px;font-size:22px}
-
-.empty{
-  text-align:center;
-  padding:35px 10px;
-  color:#7787a5
+.stat-box span{
+  color:#8495b7;
+  font-size:12px;
 }
 
-.green{color:#54dc98}
-.yellow{color:#ffd166}
-.blue{color:#65a2ff}
-.red{color:#ff7070}
-
-.hidden{display:none!important}
+.stat-box strong{
+  display:block;
+  margin-top:7px;
+  font-size:21px;
+}
 
 .back{
+  border:1px solid #30466d;
   background:#162541;
   color:#b8c7e2;
+  border-radius:11px;
+  padding:9px 13px;
+  margin-bottom:13px;
+}
+
+.filter{
+  display:flex;
+  gap:7px;
+  overflow-x:auto;
+  padding-bottom:4px;
+}
+
+.filter button{
+  flex:none;
   border:1px solid #30466d;
-  padding:10px 15px;
-  border-radius:12px;
-  margin-bottom:14px
+  background:#111e35;
+  color:#9eaecc;
+  border-radius:20px;
+  padding:8px 13px;
+}
+
+.filter button.active{
+  background:#3156a0;
+  color:#fff;
 }
 </style>
 </head>
@@ -189,95 +253,106 @@ h3{margin:0 0 10px}
 <section id="home" class="page active">
 
 <div class="hero">
-<h1>⚽ 竞彩足球预测分析 V4.0</h1>
-<p>中国竞彩足球 · 胜平负 · AI多证据判断 · 风险控制</p>
+<h1>⚽ 竞彩足球AI预测分析</h1>
+<p>中国竞彩足球 · 胜平负 · 数据分析 · 历史记录</p>
 </div>
 
 <div class="card">
-<h2>🎯 今日竞彩</h2>
+<h2>🎯 今日竞彩足球</h2>
 
 <div class="muted">
-系统只显示能够匹配中国竞彩足球的赛事。<br>
-其他联赛或无法匹配的比赛自动隐藏。
+查看今日中国竞彩足球赛事，并进入单场详细分析。
 </div>
 
 <button class="btn" onclick="openMatches()">
-🔄 读取今日竞彩足球
+查看今日赛事
 </button>
 </div>
 
 <div class="card">
-<h2>🧠 AI分析框架</h2>
+<h2>🏟️ 赛事广场</h2>
+
+<div class="muted">
+查看已经保存的比赛分析记录、预测结果和最终赛果。
+</div>
+
+<button class="btn secondary" onclick="showPage('square')">
+进入赛事广场
+</button>
+</div>
+
+<div class="card">
+<h2>🧠 AI分析</h2>
 
 <div class="analysis">
-
-<strong>每场比赛按照以下顺序分析：</strong><br><br>
-
-① 中国竞彩赛事匹配<br>
-② 主客场基本面<br>
-③ 近期比赛状态<br>
-④ 进球 / 失球趋势<br>
-⑤ 胜 / 平 / 负概率<br>
-⑥ 历史相似比赛<br>
-⑦ 数据变化<br>
-⑧ 冷门风险<br><br>
-
-<span class="yellow">
-⚠️ 关键数据不足时，系统显示“证据不足 / 暂不推荐”，不会强行给结论。
-</span>
-
+<strong>单场分析顺序</strong><br><br>
+① 基础信息<br>
+② 近期状态<br>
+③ 主客场因素<br>
+④ 进失球表现<br>
+⑤ 胜 / 平 / 负判断<br>
+⑥ 数据变化<br>
+⑦ 冷门风险<br>
+⑧ 最终结论
 </div>
 </div>
 
 <div class="card">
-<h2>📊 系统状态</h2>
+<h2>📊 历史回测</h2>
 
-<div class="stat">
-
-<div class="stat-box">
-<span>赛事过滤</span>
-<strong class="green">开启</strong>
+<div class="muted">
+通过真实预测记录和最终赛果检查分析质量。
 </div>
 
-<div class="stat-box">
-<span>分析模式</span>
-<strong class="blue">AI</strong>
-</div>
-
-<div class="stat-box">
-<span>会员限制</span>
-<strong class="green">无</strong>
-</div>
-
-<div class="stat-box">
-<span>登录要求</span>
-<strong class="green">无</strong>
-</div>
-
-</div>
+<button class="btn secondary" onclick="showPage('review')">
+查看历史回测
+</button>
 </div>
 
 </section>
 
 
-<!-- ================= 赛事 ================= -->
+<!-- ================= 今日赛事 ================= -->
 
 <section id="matches" class="page">
 
 <div class="hero">
-<h1>⚽ 中国竞彩足球</h1>
-<p>仅显示匹配成功的竞彩赛事</p>
+<h1>⚽ 今日竞彩足球</h1>
+<p>中国竞彩足球赛事</p>
 </div>
 
 <div class="card">
 
 <button class="back" onclick="showPage('home')">← 返回首页</button>
 
-<h2>📋 今日赛事</h2>
+<h2>比赛列表</h2>
 
-<div id="matchList">
-<div class="empty">正在读取赛事……</div>
+<div id="matchList"></div>
+
 </div>
+
+</section>
+
+
+<!-- ================= 赛事广场 ================= -->
+
+<section id="square" class="page">
+
+<div class="hero">
+<h1>🏟️ 赛事广场</h1>
+<p>历史比赛分析记录</p>
+</div>
+
+<div class="card">
+
+<div class="filter">
+<button class="active" onclick="filterRecords('all',this)">全部</button>
+<button onclick="filterRecords('today',this)">今日</button>
+<button onclick="filterRecords('7',this)">近7天</button>
+<button onclick="filterRecords('30',this)">近30天</button>
+</div>
+
+<div id="recordList"></div>
 
 </div>
 
@@ -289,20 +364,18 @@ h3{margin:0 0 10px}
 <section id="analysis" class="page">
 
 <div class="hero">
-<h1>🧠 单场 AI 分析</h1>
-<p>胜平负 · 多证据判断 · 冷门风险</p>
+<h1>🧠 单场AI分析</h1>
+<p>胜平负 · 数据判断 · 风险分析</p>
 </div>
 
 <div class="card">
 
-<button class="back" onclick="showPage('matches')">← 返回赛事</button>
+<button class="back" onclick="showPage('matches')">
+← 返回赛事
+</button>
 
 <div id="analysisContent">
-
-<div class="empty">
-请选择一场比赛
-</div>
-
+<div class="empty">请选择比赛。</div>
 </div>
 
 </div>
@@ -310,52 +383,45 @@ h3{margin:0 0 10px}
 </section>
 
 
-<!-- ================= 历史复盘 ================= -->
+<!-- ================= 历史回测 ================= -->
 
 <section id="review" class="page">
 
 <div class="hero">
-<h1>📈 历史复盘</h1>
-<p>用于验证模型，而不是虚构命中率</p>
+<h1>📊 历史回测</h1>
+<p>真实记录检验预测效果</p>
 </div>
 
 <div class="card">
 
-<h2>2026年9月回测</h2>
+<h2>历史统计</h2>
 
 <div class="stat">
 
 <div class="stat-box">
-<span>比赛数量</span>
-<strong id="reviewCount">待导入</strong>
+<span>记录数量</span>
+<strong id="recordCount">0</strong>
 </div>
 
 <div class="stat-box">
-<span>总体命中率</span>
-<strong>待计算</strong>
+<span>已结算</span>
+<strong id="settledCount">0</strong>
 </div>
 
 <div class="stat-box">
-<span>平局命中率</span>
-<strong>待计算</strong>
+<span>命中</span>
+<strong id="hitCount">0</strong>
 </div>
 
 <div class="stat-box">
-<span>冷门命中率</span>
-<strong>待计算</strong>
+<span>命中率</span>
+<strong id="hitRate">--</strong>
 </div>
 
 </div>
 
 <div class="analysis">
-
-当前页面只负责展示回测结果。
-
-<br><br>
-
-没有真实的逐场预测记录和最终赛果时，
-系统不会把数据伪装成“100%命中”。
-
+统计只使用实际保存的预测记录和最终赛果。
 </div>
 
 </div>
@@ -369,47 +435,52 @@ h3{margin:0 0 10px}
 
 <div class="hero">
 <h1>👤 我的</h1>
-<p>竞彩足球 AI 分析系统</p>
+<p>竞彩足球AI预测分析</p>
 </div>
 
 <div class="card">
 
-<h2>⚙️ 系统功能</h2>
+<h2>系统</h2>
 
 <button class="btn" onclick="showPage('home')">
 🏠 首页
 </button>
 
 <button class="btn" onclick="openMatches()">
-⚽ 竞彩足球
+⚽ 今日竞彩足球
 </button>
 
-<button class="btn" onclick="showPage('analysis')">
-🧠 AI分析
+<button class="btn" onclick="showPage('square')">
+🏟️ 赛事广场
 </button>
 
 <button class="btn" onclick="showPage('review')">
-📈 历史复盘
+📊 历史回测
 </button>
 
 </div>
 
 <div class="card">
 
-<h2>🔓 当前版本</h2>
+<h2>关于</h2>
 
 <div class="analysis">
-
-<span class="tag">全部开放</span>
-<span class="tag">无需登录</span>
-<span class="tag">无需会员</span>
-<span class="tag">无需充值</span>
+这是独立的竞彩足球数据分析页面。
 
 <br><br>
 
-本版本不设置会员充值入口，
-所有已经制作的页面直接开放。
+当前版本重点保留：
 
+<br><br>
+
+<span class="tag">竞彩足球</span>
+<span class="tag">胜平负</span>
+<span class="tag">赛事记录</span>
+<span class="tag">历史回测</span>
+
+<br><br>
+
+其他暂不加入。
 </div>
 
 </div>
@@ -434,14 +505,14 @@ onclick="openMatches()">
 ⚽<br>赛事
 </button>
 
-<button id="nav-analysis"
-onclick="showPage('analysis')">
-🧠<br>分析
+<button id="nav-square"
+onclick="showPage('square')">
+🏟️<br>广场
 </button>
 
 <button id="nav-review"
 onclick="showPage('review')">
-📊<br>复盘
+📊<br>回测
 </button>
 
 <button id="nav-profile"
@@ -455,13 +526,10 @@ onclick="showPage('profile')">
 <script>
 
 /* =====================================================
-   当前版本：
-   先保证网页结构、导航、赛事分析页面正常运行。
-   后续再接 API / CSV / 历史数据库。
-   ===================================================== */
-
-
-/* ---------------- 示例竞彩赛事 ---------------- */
+   今日赛事
+   当前先保留页面结构
+   后续接入真实 today.json
+===================================================== */
 
 const matches = [
 
@@ -513,12 +581,55 @@ const matches = [
 ];
 
 
-/* ---------------- 页面切换 ---------------- */
+/* =====================================================
+   历史赛事记录
+===================================================== */
+
+const records = [
+
+{
+ date:"2026-10-03",
+ league:"英超",
+ home:"阿森纳",
+ away:"切尔西",
+ prediction:"胜",
+ result:"胜",
+ status:"hit",
+ analysis:"主队近期状态较稳定，主场因素占优。"
+},
+
+{
+ date:"2026-10-03",
+ league:"西甲",
+ home:"皇家马德里",
+ away:"巴塞罗那",
+ prediction:"平",
+ result:"负",
+ status:"miss",
+ analysis:"双方实力接近，原判断防范平局。"
+},
+
+{
+ date:"2026-10-02",
+ league:"意甲",
+ home:"国际米兰",
+ away:"AC米兰",
+ prediction:"胜",
+ result:"胜",
+ status:"hit",
+ analysis:"主队近期进攻表现较好。"
+}
+
+];
+
+
+/* =====================================================
+   页面切换
+===================================================== */
 
 function showPage(page){
 
-document.querySelectorAll(".page")
-.forEach(function(p){
+document.querySelectorAll(".page").forEach(function(p){
 p.classList.remove("active");
 });
 
@@ -528,9 +639,8 @@ if(target){
 target.classList.add("active");
 }
 
-document.querySelectorAll(".nav button")
-.forEach(function(btn){
-btn.classList.remove("active");
+document.querySelectorAll(".nav button").forEach(function(b){
+b.classList.remove("active");
 });
 
 const nav=document.getElementById("nav-"+page);
@@ -547,18 +657,17 @@ behavior:"smooth"
 }
 
 
-/* ---------------- 打开赛事 ---------------- */
+/* =====================================================
+   今日赛事
+===================================================== */
 
 function openMatches(){
 
 renderMatches();
-
 showPage("matches");
 
 }
 
-
-/* ---------------- 显示赛事 ---------------- */
 
 function renderMatches(){
 
@@ -566,8 +675,7 @@ const list=document.getElementById("matchList");
 
 if(!matches.length){
 
-list.innerHTML=
-'<div class="empty">暂无匹配的中国竞彩足球赛事</div>';
+list.innerHTML='<div class="empty">暂无赛事</div>';
 
 return;
 
@@ -584,7 +692,7 @@ div.className="match";
 div.innerHTML=
 
 '<div class="match-top">'+
-'<span>'+match.no+' · '+match.league+'</span>'+
+'<span>'+match.no+" · "+match.league+'</span>'+
 '<span>'+match.time+'</span>'+
 '</div>'+
 
@@ -611,17 +719,17 @@ list.appendChild(div);
 }
 
 
-/* ---------------- 单场分析 ---------------- */
+/* =====================================================
+   单场分析
+===================================================== */
 
 function analyse(id,choice){
 
-const match=matches.find(function(item){
-return item.id===id;
+const match=matches.find(function(x){
+return x.id===id;
 });
 
-if(!match){
-return;
-}
+if(!match)return;
 
 const box=document.getElementById("analysisContent");
 
@@ -630,7 +738,7 @@ box.innerHTML=
 '<div class="match">'+
 
 '<div class="match-top">'+
-'<span>'+match.no+' · '+match.league+'</span>'+
+'<span>'+match.no+" · "+match.league+'</span>'+
 '<span>竞彩胜平负</span>'+
 '</div>'+
 
@@ -644,17 +752,17 @@ box.innerHTML=
 
 '<div class="analysis">'+
 
-'<h3>🎯 当前选择：<span class="blue">'+choice+'</span></h3>'+
+'<h3>🎯 当前判断：<span class="blue">'+choice+'</span></h3>'+
 
 '<br>'+
 
-'<strong>① 基础面</strong><br>'+
-'等待真实球队数据接入。'+
+'<strong>① 基础信息</strong><br>'+
+'等待真实赛事数据。'+
 
 '<br><br>'+
 
 '<strong>② 近期状态</strong><br>'+
-'等待近期比赛数据。'+
+'等待球队近期比赛数据。'+
 
 '<br><br>'+
 
@@ -663,25 +771,23 @@ box.innerHTML=
 
 '<br><br>'+
 
-'<strong>④ 历史相似比赛</strong><br>'+
+'<strong>④ 进失球表现</strong><br>'+
+'等待进球数据。'+
+
+'<br><br>'+
+
+'<strong>⑤ 历史相似比赛</strong><br>'+
 '等待历史数据库匹配。'+
 
 '<br><br>'+
 
-'<strong>⑤ 数据变化</strong><br>'+
-'等待实时赔率 / 数据源。'+
-
-'<br><br>'+
-
 '<strong>⑥ 冷门风险</strong><br>'+
-'当前没有足够数据进行可靠判断。'+
+'当前数据不足，暂不判断。'+
 
 '<br><br>'+
 
 '<div class="analysis">'+
-'<span class="yellow">'+
-'⚠️ 当前结论：证据不足，暂不推荐。'+
-'</span>'+
+'<span class="yellow">⚠️ 当前结论：证据不足，暂不推荐。</span>'+
 '</div>'+
 
 '</div>';
@@ -691,9 +797,155 @@ showPage("analysis");
 }
 
 
-/* ---------------- 初始化 ---------------- */
+/* =====================================================
+   赛事广场
+===================================================== */
+
+function renderRecords(list){
+
+const box=document.getElementById("recordList");
+
+if(!list.length){
+
+box.innerHTML=
+'<div class="empty">暂无历史记录</div>';
+
+return;
+
+}
+
+box.innerHTML="";
+
+list.forEach(function(item){
+
+const div=document.createElement("div");
+
+div.className="record";
+
+let status="";
+
+if(item.status==="hit"){
+
+status='<span class="win">✅ 命中</span>';
+
+}else if(item.status==="miss"){
+
+status='<span class="loss">❌ 未命中</span>';
+
+}else{
+
+status='<span class="draw">⏳ 待结算</span>';
+
+}
+
+div.innerHTML=
+
+'<div class="record-title">'+
+item.home+" vs "+item.away+
+'</div>'+
+
+'<div class="small">'+
+item.date+" · "+item.league+
+'</div>'+
+
+'<br>'+
+
+'<span class="tag">预测："+item.prediction+'</span>'+
+
+'<span class="tag">赛果："+item.result+'</span>'+
+
+'<br><br>'+
+
+status+
+
+'<div class="analysis">'+
+item.analysis+
+'</div>';
+
+box.appendChild(div);
+
+});
+
+}
+
+
+function filterRecords(type,button){
+
+document.querySelectorAll(".filter button")
+.forEach(function(b){
+b.classList.remove("active");
+});
+
+button.classList.add("active");
+
+let list=records;
+
+if(type==="today"){
+
+list=records.filter(function(x){
+return x.date==="2026-10-04";
+});
+
+}
+
+if(type==="7"){
+
+list=records;
+
+}
+
+if(type==="30"){
+
+list=records;
+
+}
+
+renderRecords(list);
+
+}
+
+
+/* =====================================================
+   统计
+===================================================== */
+
+function updateStats(){
+
+const total=records.length;
+
+const settled=records.filter(function(x){
+return x.result;
+}).length;
+
+const hit=records.filter(function(x){
+return x.status==="hit";
+}).length;
+
+document.getElementById("recordCount").textContent=total;
+
+document.getElementById("settledCount").textContent=settled;
+
+document.getElementById("hitCount").textContent=hit;
+
+document.getElementById("hitRate").textContent=
+settled
+?
+Math.round(hit/settled*100)+"%"
+:
+"--";
+
+}
+
+
+/* =====================================================
+   初始化
+===================================================== */
 
 renderMatches();
+
+renderRecords(records);
+
+updateStats();
 
 </script>
 
