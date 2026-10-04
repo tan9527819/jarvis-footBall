@@ -1,0 +1,476 @@
+name: September 2026 Backtest
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - ".github/workflows/september-backtest.yml"
+  schedule:
+    - cron: "20 2 * * *"
+
+permissions:
+  contents: write
+
+jobs:
+  backtest:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install pandas openpyxl
+
+      - name: Download NerdyTips history
+        run: |
+          mkdir -p /tmp/jarvis
+          curl -L --fail \
+            "https://raw.githubusercontent.com/Dani-Ionescu/nerdytips-data/main/allMatches.xlsx" \
+            -o /tmp/jarvis/allMatches.xlsx
+
+      - name: Build September JSON
+        run: |
+          python <<'PY'
+          import json
+          import re
+          from pathlib import Path
+          import pandas as pd
+
+          src = "/tmp/jarvis/allMatches.xlsx"
+          out = Path("data/backtest/2026-09.json")
+
+          def norm(x):
+              return re.sub(r"[^a-z0-9]+", "", str(x).lower())
+
+          def find_col(columns, keys):
+              best = None
+              best_score = 0
+
+              for c in columns:
+                  n = norm(c)
+                  score = 0
+
+                  for key in keys:
+                      k = norm(key)
+
+                      if k in n:
+                          score += len(k) + 5
+
+                  if score > best_score:
+                      best_score = score
+                      best = c
+
+              return best
+
+          def score_to_result(value):
+              s = str(value).strip()
+
+              m = re.search(
+                  r"(\d+)\s*[-:]\s*(\d+)",
+                  s
+              )
+
+              if not m:
+                  return ""
+
+              h = int(m.group(1))
+              a = int(m.group(2))
+
+              if h > a:
+                  return "1"
+
+              if h == a:
+                  return "X"
+
+              return "2"
+
+          def normalize_prediction(value):
+              s = str(value).strip().lower()
+
+              if not s or s in {
+                  "nan",
+                  "none",
+                  "null"
+              }:
+                  return ""
+
+              if re.fullmatch(r"[12x]", s):
+                  return s.upper()
+
+              if "draw" in s or "tie" in s:
+                  return "X"
+
+              if "平" in s:
+                  return "X"
+
+              if "home" in s or "主胜" in s:
+                  return "1"
+
+              if "away" in s or "客胜" in s:
+                  return "2"
+
+              return ""
+
+          print("读取 NerdyTips 历史数据...")
+
+          book = pd.ExcelFile(src)
+
+          frames = []
+
+          for sheet in book.sheet_names:
+              try:
+                  frames.append(
+                      pd.read_excel(
+                          src,
+                          sheet_name=sheet
+                      )
+                  )
+              except Exception as e:
+                  print(
+                      "跳过工作表:",
+                      sheet,
+                      e
+                  )
+
+          if not frames:
+              raise RuntimeError(
+                  "没有读取到 Excel 数据"
+              )
+
+          df = pd.concat(
+              frames,
+              ignore_index=True
+          )
+
+          df.columns = [
+              str(c).strip()
+              for c in df.columns
+          ]
+
+          print("发现字段:")
+          print(list(df.columns))
+
+          date_col = find_col(
+              df.columns,
+              [
+                  "date",
+                  "matchdate",
+                  "fixturedate",
+                  "kickoff",
+                  "datetime"
+              ]
+          )
+
+          prediction_col = find_col(
+              df.columns,
+              [
+                  "prediction",
+                  "predicted",
+                  "tip",
+                  "pick",
+                  "forecast",
+                  "mainprediction"
+              ]
+          )
+
+          result_col = find_col(
+              df.columns,
+              [
+                  "result",
+                  "finalresult",
+                  "score",
+                  "finalscore",
+                  "outcome"
+              ]
+          )
+
+          confidence_col = find_col(
+              df.columns,
+              [
+                  "confidence",
+                  "trust",
+                  "rating"
+              ]
+          )
+
+          if not date_col:
+              raise RuntimeError(
+                  "无法识别比赛日期字段"
+              )
+
+          if not prediction_col:
+              raise RuntimeError(
+                  "无法识别预测字段"
+              )
+
+          if not result_col:
+              raise RuntimeError(
+                  "无法识别最终结果字段"
+              )
+
+          print(
+              "日期字段:",
+              date_col
+          )
+
+          print(
+              "预测字段:",
+              prediction_col
+          )
+
+          print(
+              "结果字段:",
+              result_col
+          )
+
+          dates = pd.to_datetime(
+              df[date_col],
+              errors="coerce"
+          )
+
+          start = pd.Timestamp(
+              "2026-09-01"
+          )
+
+          end = pd.Timestamp(
+              "2026-09-30 23:59:59"
+          )
+
+          df = df[
+              (dates >= start)
+              &
+              (dates <= end)
+          ].copy()
+
+          df["__date"] = dates[
+              df.index
+          ]
+
+          rows = []
+
+          for _, row in df.iterrows():
+
+              prediction = normalize_prediction(
+                  row[prediction_col]
+              )
+
+              actual = score_to_result(
+                  row[result_col]
+              )
+
+              if not actual:
+                  actual = normalize_prediction(
+                      row[result_col]
+                  )
+
+              if not prediction or not actual:
+                  continue
+
+              confidence = None
+
+              if confidence_col:
+
+                  try:
+
+                      raw = str(
+                          row[confidence_col]
+                      ).replace(
+                          "%",
+                          ""
+                      ).replace(
+                          "/10",
+                          ""
+                      ).strip()
+
+                      confidence = float(raw)
+
+                      if confidence > 10:
+                          confidence /= 10
+
+                      if confidence <= 1:
+                          confidence *= 10
+
+                  except Exception:
+                      confidence = None
+
+              # 这里只做“冷门代理指数”
+              # 不冒充博彩公司赔率冷门指数
+              if confidence is None:
+
+                  upset_index = 50
+
+              else:
+
+                  upset_index = round(
+                      max(
+                          0,
+                          min(
+                              100,
+                              100 -
+                              confidence * 10
+                          )
+                      )
+                  )
+
+              rows.append({
+
+                  "date":
+                      row["__date"].strftime(
+                          "%Y-%m-%d"
+                      ),
+
+                  "prediction":
+                      prediction,
+
+                  "result":
+                      actual,
+
+                  "confidence":
+                      confidence,
+
+                  "upsetIndex":
+                      upset_index,
+
+                  "upset":
+                      upset_index >= 55
+              })
+
+          total = len(rows)
+
+          hit = sum(
+              x["prediction"]
+              ==
+              x["result"]
+              for x in rows
+          )
+
+          draw_rows = [
+              x for x in rows
+              if x["prediction"] == "X"
+          ]
+
+          draw_hit = sum(
+              x["result"] == "X"
+              for x in draw_rows
+          )
+
+          upset_rows = [
+              x for x in rows
+              if x["upset"]
+          ]
+
+          upset_hit = sum(
+              x["prediction"]
+              ==
+              x["result"]
+              for x in upset_rows
+          )
+
+          def pct(a, b):
+
+              if not b:
+                  return None
+
+              return round(
+                  a / b * 100,
+                  1
+              )
+
+          payload = {
+
+              "source":
+                  "NerdyTips public historical archive",
+
+              "period":
+                  "2026-09",
+
+              "total":
+                  total,
+
+              "hitRate":
+                  pct(hit, total),
+
+              "drawTotal":
+                  len(draw_rows),
+
+              "drawHitRate":
+                  pct(
+                      draw_hit,
+                      len(draw_rows)
+                  ),
+
+              "upsetTotal":
+                  len(upset_rows),
+
+              "upsetHitRate":
+                  pct(
+                      upset_hit,
+                      len(upset_rows)
+                  ),
+
+              "upsetDefinition":
+                  "Confidence-based proxy, not bookmaker odds",
+
+              "matches":
+                  rows
+          }
+
+          out.parent.mkdir(
+              parents=True,
+              exist_ok=True
+          )
+
+          out.write_text(
+              json.dumps(
+                  payload,
+                  ensure_ascii=False,
+                  indent=2
+              ),
+              encoding="utf-8"
+          )
+
+          print("")
+          print("========== 9月回测 ==========")
+          print(
+              "比赛:",
+              total
+          )
+          print(
+              "总体:",
+              payload["hitRate"],
+              "%"
+          )
+          print(
+              "平局:",
+              payload["drawHitRate"],
+              "%"
+          )
+          print(
+              "冷门代理:",
+              payload["upsetHitRate"],
+              "%"
+          )
+          print("==============================")
+          PY
+
+      - name: Save backtest result
+        run: |
+          git config user.name "jarvis-backtest"
+          git config user.email "actions@github.com"
+
+          git add data/backtest/2026-09.json
+
+          if git diff --cached --quiet; then
+            echo "没有新的数据变化"
+          else
+            git commit -m "Add September 2026 historical backtest"
+            git push
+          fi
