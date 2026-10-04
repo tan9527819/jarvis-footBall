@@ -1,358 +1,333 @@
-<!-- 2026年9月详细回测 V3.4 -->
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>竞彩足球预测分析 V3.4</title>
 
-<div class="card backtest">
-
-<h2>🧪 2026年9月历史回测</h2>
-
-<div class="muted">
-2026-09-01 ～ 2026-09-30
-</div>
-
-<div class="grid" style="margin-top:10px">
-
-<div class="metric">
-官方样本
-<b id="btSource">—</b>
-</div>
-
-<div class="metric">
-有效样本
-<b id="btGames">—</b>
-</div>
-
-<div class="metric">
-总体命中
-<b id="btHit">—</b>
-</div>
-
-<div class="metric">
-平局命中
-<b id="btDraw">—</b>
-</div>
-
-</div>
-
-<button
-class="primary"
-onclick="runBacktest()">
-
-🧪 读取9月详细回测
-
-</button>
-
-<div
-id="backtestResult"
-class="signal">
-
-等待读取……
-
-</div>
-
-<div
-id="backtestMatches"
-style="margin-top:12px">
-
-</div>
-
-</div>
-
-<script>
-
-async function runBacktest(){
-
-const result =
-document.getElementById(
-"backtestResult"
-);
-
-const list =
-document.getElementById(
-"backtestMatches"
-);
-
-result.innerHTML =
-"🔄 正在读取9月逐场数据……";
-
-list.innerHTML = "";
-
-try{
-
-const response =
-await fetch(
-"data/backtest/2026-09.json?"+
-Date.now()
-);
-
-if(!response.ok){
-
-throw new Error(
-"HTTP "+
-response.status
-);
-
+<style>
+*{
+  box-sizing:border-box;
 }
 
-const data =
-await response.json();
-
-const rows =
-data.matches || [];
-
-document.getElementById(
-"btSource"
-).textContent =
-data.source_month_total ||
-"—";
-
-document.getElementById(
-"btGames"
-).textContent =
-data.valid_records ||
-rows.length;
-
-document.getElementById(
-"btHit"
-).textContent =
-data.hitRate === null ||
-data.hitRate === undefined
-?
-"—"
-:
-data.hitRate+"%";
-
-document.getElementById(
-"btDraw"
-).textContent =
-data.drawHitRate === null ||
-data.drawHitRate === undefined
-?
-"—"
-:
-data.drawHitRate+"%";
-
-
-result.innerHTML =
-
-"🟢 <b>9月详细回测已加载</b>"+
-"<br><br>"+
-"官方月度样本："+
-(data.source_month_total || "—")+
-"<br>"+
-"系统有效样本："+
-(data.valid_records || rows.length)+
-"<br>"+
-"总体命中率："+
-(
-data.hitRate == null
-?
-"—"
-:
-data.hitRate+"%"
-)+
-"<br>"+
-"平局命中率："+
-(
-data.drawHitRate == null
-?
-"—"
-:
-data.drawHitRate+"%"
-)+
-"<br><br>"+
-"<span class='muted'>"+
-"冷门指数暂不计算：当前没有真实赔率数据。"+
-"</span>";
-
-
-if(!rows.length){
-
-list.innerHTML =
-"<div class='signal'>"+
-"没有逐场记录。"+
-"</div>";
-
-return;
-
+body{
+  margin:0;
+  background:#07101d;
+  color:#eef4ff;
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
 }
 
-
-const fragment =
-document.createDocumentFragment();
-
-
-rows.forEach(
-(row,index)=>{
-
-const div =
-document.createElement(
-"div"
-);
-
-div.className =
-"match";
-
-const hit =
-row.hit === true;
-
-const hitText =
-hit
-?
-"✓ 命中"
-:
-"✕ 未命中";
-
-const hitClass =
-hit
-?
-"good"
-:
-"bad";
-
-const prediction =
-row.prediction || "—";
-
-const result =
-row.result || "—";
-
-div.innerHTML = `
-
-<div class="league">
-
-${escapeHtml(
-row.date || ""
-)}
-
- ·
-
-${escapeHtml(
-row.league || "未知赛事"
-)}
-
-</div>
-
-<div class="row">
-
-<div class="team">
-
-${escapeHtml(
-row.home || "主队"
-)}
-
-<br>
-
-<span class="muted">
-
-vs
-
-${escapeHtml(
-row.away || "客队"
-)}
-
-</span>
-
-</div>
-
-<span class="badge ${hitClass}">
-
-${hitText}
-
-</span>
-
-</div>
-
-<div
-class="signal"
-style="margin-top:8px">
-
-<div class="line">
-
-<span>预测</span>
-
-<b>${prediction}</b>
-
-</div>
-
-<div class="line">
-
-<span>实际赛果</span>
-
-<b>${result}</b>
-
-</div>
-
-<div class="line">
-
-<span>最终比分</span>
-
-<b>${escapeHtml(
-row.score || "—"
-)}</b>
-
-</div>
-
-<div class="line">
-
-<span>信心</span>
-
-<b>${
-row.confidence == null
-?
-"—"
-:
-escapeHtml(
-String(row.confidence)
-)
-}</b>
-
-</div>
-
-</div>
-
-`;
-
-fragment.appendChild(
-div
-);
-
-});
-
-list.appendChild(
-fragment
-);
-
-}catch(error){
-
-console.error(error);
-
-result.innerHTML =
-
-"🔴 <b>读取失败</b>"+
-"<br><br>"+
-escapeHtml(
-error.message
-)+
-"<br><br>"+
-"请确认 GitHub Actions 已经绿色完成。";
-
+.container{
+  max-width:980px;
+  margin:auto;
+  padding:14px;
 }
 
+.header{
+  background:#142753;
+  border-radius:0 0 22px 22px;
+  padding:24px 18px;
+  margin:-14px -14px 18px;
 }
 
-
-function escapeHtml(value){
-
-return String(value)
-
-.replaceAll("&","&amp;")
-
-.replaceAll("<","&lt;")
-
-.replaceAll(">","&gt;")
-
-.replaceAll('"',"&quot;")
-
-.replaceAll("'","&#039;");
-
+.header h1{
+  margin:0;
+  font-size:27px;
 }
 
-</script>
+.header p{
+  margin:8px 0 0;
+  color:#9db0d0;
+}
+
+.card{
+  background:#0d1a2b;
+  border:1px solid #25436d;
+  border-radius:18px;
+  padding:18px;
+  margin-bottom:16px;
+}
+
+h2{
+  margin:0 0 8px;
+}
+
+.muted{
+  color:#8da1bd;
+  font-size:14px;
+}
+
+button{
+  border:0;
+  border-radius:12px;
+  padding:13px 16px;
+  color:white;
+  background:#587cf5;
+  font-size:16px;
+  font-weight:700;
+}
+
+button:active{
+  opacity:.8;
+}
+
+.stats{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
+  margin:16px 0;
+}
+
+.stat{
+  background:#081322;
+  border-radius:14px;
+  padding:14px;
+}
+
+.stat span{
+  display:block;
+  color:#8da1bd;
+  font-size:14px;
+}
+
+.stat b{
+  display:block;
+  font-size:25px;
+  margin-top:5px;
+}
+
+.status{
+  padding:14px;
+  background:#111f33;
+  border-radius:14px;
+  line-height:1.8;
+}
+
+.good{
+  color:#71e69a;
+}
+
+.bad{
+  color:#ff7e7e;
+}
+
+.warning{
+  color:#ffd27b;
+}
+
+.match{
+  background:#101f34;
+  border:1px solid #243c5b;
+  border-radius:15px;
+  margin-top:10px;
+  overflow:hidden;
+}
+
+.match-head{
+  padding:14px;
+}
+
+.league{
+  color:#8fa7c4;
+  font-size:12px;
+}
+
+.teams{
+  font-size:17px;
+  font-weight:700;
+  margin:9px 0;
+}
+
+.score{
+  color:#c5d4e9;
+  margin-top:6px;
+}
+
+.badge{
+  display:inline-block;
+  padding:5px 9px;
+  border-radius:8px;
+  font-size:12px;
+  margin-right:5px;
+  background:#1a304b;
+}
+
+.hit{
+  background:#123b2a;
+  color:#76e4a0;
+}
+
+.miss{
+  background:#3b2025;
+  color:#ff9494;
+}
+
+.detail{
+  display:none;
+  border-top:1px solid #263c59;
+  padding:14px;
+  background:#091522;
+}
+
+.detail.open{
+  display:block;
+}
+
+.detail-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:8px;
+}
+
+.box{
+  background:#0e2035;
+  border-radius:10px;
+  padding:10px;
+}
+
+.box span{
+  display:block;
+  color:#8298b4;
+  font-size:11px;
+}
+
+.box b{
+  display:block;
+  margin-top:4px;
+}
+
+.expand{
+  width:100%;
+  border-radius:0;
+  background:#172f4b;
+  font-size:14px;
+}
+
+.empty{
+  text-align:center;
+  color:#8196b0;
+  padding:35px 10px;
+}
+
+.small{
+  font-size:12px;
+  color:#7188a3;
+  line-height:1.7;
+}
+
+@media(max-width:600px){
+
+  .container{
+    padding:12px;
+  }
+
+  .stats{
+    grid-template-columns:1fr 1fr;
+  }
+
+  .detail-grid{
+    grid-template-columns:1fr 1fr;
+  }
+
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+  <div class="header">
+    <h1>⚽ 竞彩足球预测分析 V3.4</h1>
+    <p>真实赛事 · 历史回测 · 平局 · 冷门 · 风险控制</p>
+  </div>
+
+
+  <!-- 今日赛事 -->
+
+  <div class="card">
+
+    <h2>📅 今日赛事</h2>
+
+    <p class="muted">
+      数据状态：<span id="todayStatus">读取中</span>
+    </p>
+
+    <button onclick="loadToday()">
+      🔄 刷新今日比赛
+    </button>
+
+    <div id="todayList">
+      <div class="empty">
+        正在读取赛事数据……
+      </div>
+    </div>
+
+  </div>
+
+
+  <!-- 9月历史回测 -->
+
+  <div class="card">
+
+    <h2>🧪 2026年9月历史回测</h2>
+
+    <p class="muted">
+      测试区间：2026-09-01 ～ 2026-09-30
+    </p>
+
+
+    <div class="stats">
+
+      <div class="stat">
+        <span>官方月度记录</span>
+        <b id="sourceTotal">—</b>
+      </div>
+
+      <div class="stat">
+        <span>有效逐场记录</span>
+        <b id="validTotal">—</b>
+      </div>
+
+      <div class="stat">
+        <span>总体命中率</span>
+        <b id="hitRate">—</b>
+      </div>
+
+      <div class="stat">
+        <span>平局命中率</span>
+        <b id="drawRate">—</b>
+      </div>
+
+    </div>
+
+
+    <button onclick="loadBacktest()">
+      🧪 开始9月回测
+    </button>
+
+
+    <div
+      id="backtestStatus"
+      class="status"
+      style="margin-top:14px"
+    >
+      等待读取9月数据……
+    </div>
+
+
+    <div
+      id="matchList"
+      style="margin-top:14px"
+    ></div>
+
+  </div>
+
+
+  <!-- 冷门 -->
+
+  <div class="card">
+
+    <h2>🔥 冷门大神雷达</h2>
+
+    <div
