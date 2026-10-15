@@ -1,8 +1,8 @@
 {
   "source": "Football-Data.co.uk",
   "is_live_feed": false,
-  "updated_at": "2026-10-14T08:58:04.096195+00:00",
-  "match_count": 16463,
+  "updated_at": "2026-10-15T08:32:02.401444+00:00",
+  "match_count": 16475,
   "downloaded_files": [
     "https://www.football-data.co.uk/mmz4281/2122/E0.csv",
     "https://www.football-data.co.uk/mmz4281/2122/E1.csv",
@@ -256618,6 +256618,198 @@
         "home": 1.53,
         "draw": 4.0,
         "away": 5.5
+      }
+    },
+    {
+      "source": "Football-Data.co.uk",
+      "season": "2627",
+      "league": "E1",
+      "date": "13/10/2026",
+      "home": "Bristol City",
+      "away": "Blackburn",
+      "home_goals": 0.0,
+      "away_goals": 1.0,
+      "result": "A",
+      "odds": {
+        "home": 2.05,
+        "draw": 3.3,
+        "away": 3.6
+      }
+    },
+    {
+      "source": "Football-Data.co.uk",
+      "season": "2627",
+      "league": "E1",
+      "date": "13/10/2026",
+      "home": "Burnley",
+      "away": "Charlton",
+      "home_goals": 2.0,
+      "away_goals": 2.0,
+      "result": "D",
+      "odds": {
+        "home": 1.61,
+        "draw": 3.7,
+        "away": 5.25
+      }
+    },
+    {
+      "source": "Football-Data.co.uk",
+      "season": "2627",
+      "league": "E1",
+      "date": "13/10/2026",
+      "home": "Cardiff",
+      "away": "Watford",
+      "home_goals": 5.0,
+      "away_goals": 1.0,
+      "result": "H",
+      "odds": {
+        "home": 1.57,
+        "draw": 4.1,
+        "away": 5.0
+      }
+    },
+    {
+      "source": "Football-Data.co.uk",
+      "season": "2627",
+      "league": "E1",
+      "date": "13/10/2026",
+      "home": "Millwall",
+      "away": "Swansea",
+      "home_goals": 0.0,
+      "away_goals": 1.0,
+      "result": "A",
+      "odds": {
+        "home": 2.32,
+        "draw": 3.5,
+        "away": 2.75
+      }
+    },
+    {
+      "source": "Football-Data.co.uk",
+      "season": "2627",
+      "league": "E1",
+      "date": "13/10/2026",
+      "home": "Wolves",
+      "away": "Bolton",
+      "home_goals": 1.0,
+      "away_goals": 3.0,
+      "result": "A",
+      "odds": {
+        "home": 1.37,
+        "draw": 4.5,
+        "away": 7.5
+      }
+    },
+    {
+      "source": "Football-Data.co.uk",
+      "season": "2627",
+      "league": "E1",
+      "date": "13/10/2026",
+      "home": "Wrexham",
+      "away": "West Brom",
+      "home_goals": 1.0,
+      "away_goals": 2.0,
+      "result": "A",
+      "odds": {
+        "home": 2.2,
+        "draw": 3.25,
+        "away": 3.2
+      }
+    },
+    {
+      "source": "Football-Data.co.uk",
+      "season": "2627",
+      "league": "E1",
+      "date": "13/10/2026",
+      "home": "Birmingham",
+      "away": "Preston",
+      "home_goals": 4.0,
+      "away_goals": 0.0,
+      "result": "H",
+      "odds": {
+        "home": 1.51,
+        "draw": 4.2,
+        "away": 5.75
+      }
+    },
+    {
+      "source": "Football-Data.co.uk",
+      "season": "2627",
+      "league": "E1",
+      "date": "13/10/2026",
+      "home": "Stoke",
+      "away": "Middlesbrough",
+      "home_goals": 2.0,
+      "away_goals": 3.0,
+      "result": "A",
+      "odds": {
+        "home": 3.5,
+        "draw": 3.5,
+        "away": 1.96
+      }
+    },
+    {
+      "source": "Football-Data.co.uk",
+      "season": "2627",
+      "league": "E1",
+      "date": "14/10/2026",
+      "home": "Norwich",
+      "away": "Southampton",
+      "home_goals": 0.0,
+      "away_goals": 1.0,
+      "result": "A",
+      "odds": {
+        "home": 2.4,
+        "draw": 3.6,
+        "away": 2.57
+      }
+    },
+    {
+      "source": "Football-Data.co.uk",
+      "season": "2627",
+      "league": "E1",
+      "date": "14/10/2026",
+      "home": "Portsmouth",
+      "away": "Sheffield United",
+      "home_goals": 3.0,
+      "away_goals": 2.0,
+      "result": "H",
+      "odds": {
+        "home": 2.2,
+        "draw": 3.25,
+        "away": 3.2
+      }
+    },
+    {
+      "source": "Football-Data.co.uk",
+      "season": "2627",
+      "league": "E1",
+      "date": "14/10/2026",
+      "home": "QPR",
+      "away": "Derby",
+      "home_goals": 4.0,
+      "away_goals": 1.0,
+      "result": "H",
+      "odds": {
+        "home": 1.66,
+        "draw": 3.8,
+        "away": 4.5
+      }
+    },
+    {
+      "source": "Football-Data.co.uk",
+      "season": "2627",
+      "league": "E1",
+      "date": "14/10/2026",
+      "home": "Lincoln",
+      "away": "West Ham",
+      "home_goals": 0.0,
+      "away_goals": 6.0,
+      "result": "A",
+      "odds": {
+        "home": 5.0,
+        "draw": 3.8,
+        "away": 1.62
       }
     },
     {
