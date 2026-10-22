@@ -1,8 +1,8 @@
 {
   "source": "Football-Data.co.uk",
   "is_live_feed": false,
-  "updated_at": "2026-10-21T08:49:02.440779+00:00",
-  "match_count": 16551,
+  "updated_at": "2026-10-22T08:51:25.425018+00:00",
+  "match_count": 16553,
   "downloaded_files": [
     "https://www.football-data.co.uk/mmz4281/2122/E0.csv",
     "https://www.football-data.co.uk/mmz4281/2122/E1.csv",
@@ -257167,6 +257167,22 @@
     {
       "source": "Football-Data.co.uk",
       "season": "2627",
+      "league": "E1",
+      "date": "20/10/2026",
+      "home": "Wolves",
+      "away": "Portsmouth",
+      "home_goals": 1.0,
+      "away_goals": 1.0,
+      "result": "D",
+      "odds": {
+        "home": 1.53,
+        "draw": 4.1,
+        "away": 5.25
+      }
+    },
+    {
+      "source": "Football-Data.co.uk",
+      "season": "2627",
       "league": "SP1",
       "date": "15/08/2026",
       "home": "Alaves",
@@ -258570,6 +258586,22 @@
         "home": 2.9,
         "draw": 3.0,
         "away": 2.7
+      }
+    },
+    {
+      "source": "Football-Data.co.uk",
+      "season": "2627",
+      "league": "SP1",
+      "date": "21/10/2026",
+      "home": "Levante",
+      "away": "Ath Bilbao",
+      "home_goals": 3.0,
+      "away_goals": 1.0,
+      "result": "H",
+      "odds": {
+        "home": 3.4,
+        "draw": 3.5,
+        "away": 2.15
       }
     },
     {
