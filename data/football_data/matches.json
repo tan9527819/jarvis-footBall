@@ -1,7 +1,7 @@
 {
   "source": "Football-Data.co.uk",
   "is_live_feed": false,
-  "updated_at": "2026-11-05T11:23:16.921983+00:00",
+  "updated_at": "2026-11-06T11:21:45.481151+00:00",
   "match_count": 16746,
   "downloaded_files": [
     "https://www.football-data.co.uk/mmz4281/2122/E0.csv",
@@ -257954,7 +257954,7 @@
       "league": "E1",
       "date": "03/11/2026",
       "home": "Preston",
-      "away": "Sheffield Utd",
+      "away": "Sheffield United",
       "home_goals": 2.0,
       "away_goals": 3.0,
       "result": "A",
