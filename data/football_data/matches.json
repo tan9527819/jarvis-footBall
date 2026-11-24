@@ -1,8 +1,8 @@
 {
   "source": "Football-Data.co.uk",
   "is_live_feed": false,
-  "updated_at": "2026-11-23T13:30:02.172830+00:00",
-  "match_count": 16829,
+  "updated_at": "2026-11-24T14:07:52.376765+00:00",
+  "match_count": 16904,
   "downloaded_files": [
     "https://www.football-data.co.uk/mmz4281/2122/E0.csv",
     "https://www.football-data.co.uk/mmz4281/2122/E1.csv",
@@ -255551,6 +255551,166 @@
     {
       "source": "Football-Data.co.uk",
       "season": "2627",
+      "league": "E0",
+      "date": "21/11/2026",
+      "home": "Man City",
+      "away": "Fulham",
+      "home_goals": 1.0,
+      "away_goals": 1.0,
+      "result": "D",
+      "odds": {
+        "home": 1.36,
+        "draw": 5.25,
+        "away": 7.0
+      }
+    },
+    {
+      "source": "Football-Data.co.uk",
+      "season": "2627",
+      "league": "E0",
+      "date": "21/11/2026",
+      "home": "Aston Villa",
+      "away": "Sunderland",
+      "home_goals": 0.0,
+      "away_goals": 0.0,
+      "result": "D",
+      "odds": {
+        "home": 1.75,
+        "draw": 3.8,
+        "away": 4.5
+      }
+    },
+    {
+      "source": "Football-Data.co.uk",
+      "season": "2627",
+      "league": "E0",
+      "date": "21/11/2026",
+      "home": "Bournemouth",
+      "away": "Nott'm Forest",
+      "home_goals": 2.0,
+      "away_goals": 0.0,
+      "result": "H",
+      "odds": {
+        "home": 1.91,
+        "draw": 3.5,
+        "away": 4.0
+      }
+    },
+    {
+      "source": "Football-Data.co.uk",
+      "season": "2627",
+      "league": "E0",
+      "date": "21/11/2026",
+      "home": "Chelsea",
+      "away": "Leeds",
+      "home_goals": 1.0,
+      "away_goals": 4.0,
+      "result": "A",
+      "odds": {
+        "home": 1.85,
+        "draw": 3.7,
+        "away": 4.0
+      }
+    },
+    {
+      "source": "Football-Data.co.uk",
+      "season": "2627",
+      "league": "E0",
+      "date": "21/11/2026",
+      "home": "Coventry",
+      "away": "Crystal Palace",
+      "home_goals": 3.0,
+      "away_goals": 2.0,
+      "result": "H",
+      "odds": {
+        "home": 2.5,
+        "draw": 3.5,
+        "away": 2.75
+      }
+    },
+    {
+      "source": "Football-Data.co.uk",
+      "season": "2627",
+      "league": "E0",
+      "date": "21/11/2026",
+      "home": "Tottenham",
+      "away": "Ipswich",
+      "home_goals": 2.0,
+      "away_goals": 0.0,
+      "result": "H",
+      "odds": {
+        "home": 1.53,
+        "draw": 4.33,
+        "away": 5.5
+      }
+    },
+    {
+      "source": "Football-Data.co.uk",
+      "season": "2627",
+      "league": "E0",
+      "date": "21/11/2026",
+      "home": "Newcastle",
+      "away": "Arsenal",
+      "home_goals": 2.0,
+      "away_goals": 2.0,
+      "result": "D",
+      "odds": {
+        "home": 5.75,
+        "draw": 4.2,
+        "away": 1.57
+      }
+    },
+    {
+      "source": "Football-Data.co.uk",
+      "season": "2627",
+      "league": "E0",
+      "date": "22/11/2026",
+      "home": "Hull",
+      "away": "Brighton",
+      "home_goals": 2.0,
+      "away_goals": 0.0,
+      "result": "H",
+      "odds": {
+        "home": 6.5,
+        "draw": 4.33,
+        "away": 1.5
+      }
+    },
+    {
+      "source": "Football-Data.co.uk",
+      "season": "2627",
+      "league": "E0",
+      "date": "22/11/2026",
+      "home": "Liverpool",
+      "away": "Man United",
+      "home_goals": 4.0,
+      "away_goals": 0.0,
+      "result": "H",
+      "odds": {
+        "home": 1.7,
+        "draw": 4.2,
+        "away": 4.33
+      }
+    },
+    {
+      "source": "Football-Data.co.uk",
+      "season": "2627",
+      "league": "E0",
+      "date": "23/11/2026",
+      "home": "Brentford",
+      "away": "Everton",
+      "home_goals": 4.0,
+      "away_goals": 0.0,
+      "result": "H",
+      "odds": {
+        "home": 2.15,
+        "draw": 3.5,
+        "away": 3.3
+      }
+    },
+    {
+      "source": "Football-Data.co.uk",
+      "season": "2627",
       "league": "E1",
       "date": "14/08/2026",
       "home": "Wolves",
@@ -258431,6 +258591,198 @@
     {
       "source": "Football-Data.co.uk",
       "season": "2627",
+      "league": "E1",
+      "date": "21/11/2026",
+      "home": "Millwall",
+      "away": "QPR",
+      "home_goals": 0.0,
+      "away_goals": 1.0,
+      "result": "A",
+      "odds": {
+        "home": 2.6,
+        "draw": 3.5,
+        "away": 2.6
+      }
+    },
+    {
+      "source": "Football-Data.co.uk",
+      "season": "2627",
+      "league": "E1",
+      "date": "21/11/2026",
+      "home": "Norwich",
+      "away": "Cardiff",
+      "home_goals": 2.0,
+      "away_goals": 1.0,
+      "result": "H",
+      "odds": {
+        "home": 1.75,
+        "draw": 4.2,
+        "away": 4.0
+      }
+    },
+    {
+      "source": "Football-Data.co.uk",
+      "season": "2627",
+      "league": "E1",
+      "date": "21/11/2026",
+      "home": "Southampton",
+      "away": "Derby",
+      "home_goals": 2.0,
+      "away_goals": 0.0,
+      "result": "H",
+      "odds": {
+        "home": 1.38,
+        "draw": 5.0,
+        "away": 7.5
+      }
+    },
+    {
+      "source": "Football-Data.co.uk",
+      "season": "2627",
+      "league": "E1",
+      "date": "21/11/2026",
+      "home": "Bolton",
+      "away": "Portsmouth",
+      "home_goals": 1.0,
+      "away_goals": 1.0,
+      "result": "D",
+      "odds": {
+        "home": 2.75,
+        "draw": 3.4,
+        "away": 2.45
+      }
+    },
+    {
+      "source": "Football-Data.co.uk",
+      "season": "2627",
+      "league": "E1",
+      "date": "21/11/2026",
+      "home": "Lincoln",
+      "away": "Wrexham",
+      "home_goals": 0.0,
+      "away_goals": 1.0,
+      "result": "A",
+      "odds": {
+        "home": 2.75,
+        "draw": 3.25,
+        "away": 2.6
+      }
+    },
+    {
+      "source": "Football-Data.co.uk",
+      "season": "2627",
+      "league": "E1",
+      "date": "21/11/2026",
+      "home": "Middlesbrough",
+      "away": "Bristol City",
+      "home_goals": 2.0,
+      "away_goals": 0.0,
+      "result": "H",
+      "odds": {
+        "home": 1.38,
+        "draw": 5.0,
+        "away": 7.0
+      }
+    },
+    {
+      "source": "Football-Data.co.uk",
+      "season": "2627",
+      "league": "E1",
+      "date": "21/11/2026",
+      "home": "Sheffield United",
+      "away": "Watford",
+      "home_goals": 4.0,
+      "away_goals": 0.0,
+      "result": "H",
+      "odds": {
+        "home": 1.57,
+        "draw": 4.1,
+        "away": 5.25
+      }
+    },
+    {
+      "source": "Football-Data.co.uk",
+      "season": "2627",
+      "league": "E1",
+      "date": "21/11/2026",
+      "home": "Stoke",
+      "away": "Birmingham",
+      "home_goals": 1.0,
+      "away_goals": 0.0,
+      "result": "H",
+      "odds": {
+        "home": 2.88,
+        "draw": 3.3,
+        "away": 2.45
+      }
+    },
+    {
+      "source": "Football-Data.co.uk",
+      "season": "2627",
+      "league": "E1",
+      "date": "21/11/2026",
+      "home": "Swansea",
+      "away": "West Brom",
+      "home_goals": 2.0,
+      "away_goals": 2.0,
+      "result": "D",
+      "odds": {
+        "home": 2.6,
+        "draw": 3.3,
+        "away": 2.7
+      }
+    },
+    {
+      "source": "Football-Data.co.uk",
+      "season": "2627",
+      "league": "E1",
+      "date": "21/11/2026",
+      "home": "West Ham",
+      "away": "Preston",
+      "home_goals": 1.0,
+      "away_goals": 1.0,
+      "result": "D",
+      "odds": {
+        "home": 1.2,
+        "draw": 7.0,
+        "away": 11.0
+      }
+    },
+    {
+      "source": "Football-Data.co.uk",
+      "season": "2627",
+      "league": "E1",
+      "date": "21/11/2026",
+      "home": "Wolves",
+      "away": "Charlton",
+      "home_goals": 2.0,
+      "away_goals": 1.0,
+      "result": "H",
+      "odds": {
+        "home": 1.33,
+        "draw": 5.5,
+        "away": 8.0
+      }
+    },
+    {
+      "source": "Football-Data.co.uk",
+      "season": "2627",
+      "league": "E1",
+      "date": "22/11/2026",
+      "home": "Burnley",
+      "away": "Blackburn",
+      "home_goals": 2.0,
+      "away_goals": 2.0,
+      "result": "D",
+      "odds": {
+        "home": 1.85,
+        "draw": 3.8,
+        "away": 3.8
+      }
+    },
+    {
+      "source": "Football-Data.co.uk",
+      "season": "2627",
       "league": "SP1",
       "date": "15/08/2026",
       "home": "Alaves",
@@ -260335,6 +260687,166 @@
     {
       "source": "Football-Data.co.uk",
       "season": "2627",
+      "league": "SP1",
+      "date": "20/11/2026",
+      "home": "Ath Bilbao",
+      "away": "Espanol",
+      "home_goals": 0.0,
+      "away_goals": 1.0,
+      "result": "A",
+      "odds": {
+        "home": 1.5,
+        "draw": 4.33,
+        "away": 6.5
+      }
+    },
+    {
+      "source": "Football-Data.co.uk",
+      "season": "2627",
+      "league": "SP1",
+      "date": "21/11/2026",
+      "home": "Alaves",
+      "away": "La Coruna",
+      "home_goals": 3.0,
+      "away_goals": 1.0,
+      "result": "H",
+      "odds": {
+        "home": 2.2,
+        "draw": 3.3,
+        "away": 3.4
+      }
+    },
+    {
+      "source": "Football-Data.co.uk",
+      "season": "2627",
+      "league": "SP1",
+      "date": "21/11/2026",
+      "home": "Vallecano",
+      "away": "Valencia",
+      "home_goals": 0.0,
+      "away_goals": 1.0,
+      "result": "A",
+      "odds": {
+        "home": 1.91,
+        "draw": 3.5,
+        "away": 4.1
+      }
+    },
+    {
+      "source": "Football-Data.co.uk",
+      "season": "2627",
+      "league": "SP1",
+      "date": "21/11/2026",
+      "home": "Sevilla",
+      "away": "Betis",
+      "home_goals": 1.0,
+      "away_goals": 1.0,
+      "result": "D",
+      "odds": {
+        "home": 3.0,
+        "draw": 3.4,
+        "away": 2.38
+      }
+    },
+    {
+      "source": "Football-Data.co.uk",
+      "season": "2627",
+      "league": "SP1",
+      "date": "21/11/2026",
+      "home": "Real Madrid",
+      "away": "Celta",
+      "home_goals": 2.0,
+      "away_goals": 1.0,
+      "result": "H",
+      "odds": {
+        "home": 1.17,
+        "draw": 8.0,
+        "away": 13.0
+      }
+    },
+    {
+      "source": "Football-Data.co.uk",
+      "season": "2627",
+      "league": "SP1",
+      "date": "22/11/2026",
+      "home": "Barcelona",
+      "away": "Villarreal",
+      "home_goals": 3.0,
+      "away_goals": 2.0,
+      "result": "H",
+      "odds": {
+        "home": 1.2,
+        "draw": 7.5,
+        "away": 10.0
+      }
+    },
+    {
+      "source": "Football-Data.co.uk",
+      "season": "2627",
+      "league": "SP1",
+      "date": "22/11/2026",
+      "home": "Santander",
+      "away": "Sociedad",
+      "home_goals": 3.0,
+      "away_goals": 2.0,
+      "result": "H",
+      "odds": {
+        "home": 3.25,
+        "draw": 4.2,
+        "away": 2.0
+      }
+    },
+    {
+      "source": "Football-Data.co.uk",
+      "season": "2627",
+      "league": "SP1",
+      "date": "22/11/2026",
+      "home": "Osasuna",
+      "away": "Malaga",
+      "home_goals": 1.0,
+      "away_goals": 0.0,
+      "result": "H",
+      "odds": {
+        "home": 1.8,
+        "draw": 3.5,
+        "away": 4.5
+      }
+    },
+    {
+      "source": "Football-Data.co.uk",
+      "season": "2627",
+      "league": "SP1",
+      "date": "22/11/2026",
+      "home": "Getafe",
+      "away": "Ath Madrid",
+      "home_goals": 0.0,
+      "away_goals": 3.0,
+      "result": "A",
+      "odds": {
+        "home": 6.25,
+        "draw": 3.9,
+        "away": 1.55
+      }
+    },
+    {
+      "source": "Football-Data.co.uk",
+      "season": "2627",
+      "league": "SP1",
+      "date": "23/11/2026",
+      "home": "Levante",
+      "away": "Elche",
+      "home_goals": 1.0,
+      "away_goals": 1.0,
+      "result": "D",
+      "odds": {
+        "home": 2.15,
+        "draw": 3.6,
+        "away": 3.25
+      }
+    },
+    {
+      "source": "Football-Data.co.uk",
+      "season": "2627",
       "league": "D1",
       "date": "28/08/2026",
       "home": "Bayern Munich",
@@ -261626,6 +262138,150 @@
         "home": 1.6,
         "draw": 4.33,
         "away": 5.25
+      }
+    },
+    {
+      "source": "Football-Data.co.uk",
+      "season": "2627",
+      "league": "D1",
+      "date": "20/11/2026",
+      "home": "Bayern Munich",
+      "away": "FC Koln",
+      "home_goals": 1.0,
+      "away_goals": 1.0,
+      "result": "D",
+      "odds": {
+        "home": 1.08,
+        "draw": 13.0,
+        "away": 19.0
+      }
+    },
+    {
+      "source": "Football-Data.co.uk",
+      "season": "2627",
+      "league": "D1",
+      "date": "21/11/2026",
+      "home": "Ein Frankfurt",
+      "away": "Hoffenheim",
+      "home_goals": 1.0,
+      "away_goals": 0.0,
+      "result": "H",
+      "odds": {
+        "home": 2.3,
+        "draw": 4.0,
+        "away": 2.7
+      }
+    },
+    {
+      "source": "Football-Data.co.uk",
+      "season": "2627",
+      "league": "D1",
+      "date": "21/11/2026",
+      "home": "Elversberg",
+      "away": "Freiburg",
+      "home_goals": 0.0,
+      "away_goals": 1.0,
+      "result": "A",
+      "odds": {
+        "home": 3.6,
+        "draw": 3.75,
+        "away": 1.95
+      }
+    },
+    {
+      "source": "Football-Data.co.uk",
+      "season": "2627",
+      "league": "D1",
+      "date": "21/11/2026",
+      "home": "Leverkusen",
+      "away": "Paderborn",
+      "home_goals": 4.0,
+      "away_goals": 0.0,
+      "result": "H",
+      "odds": {
+        "home": 1.29,
+        "draw": 6.5,
+        "away": 8.0
+      }
+    },
+    {
+      "source": "Football-Data.co.uk",
+      "season": "2627",
+      "league": "D1",
+      "date": "21/11/2026",
+      "home": "M'gladbach",
+      "away": "Dortmund",
+      "home_goals": 0.0,
+      "away_goals": 1.0,
+      "result": "A",
+      "odds": {
+        "home": 5.25,
+        "draw": 4.33,
+        "away": 1.57
+      }
+    },
+    {
+      "source": "Football-Data.co.uk",
+      "season": "2627",
+      "league": "D1",
+      "date": "21/11/2026",
+      "home": "Union Berlin",
+      "away": "RB Leipzig",
+      "home_goals": 1.0,
+      "away_goals": 5.0,
+      "result": "A",
+      "odds": {
+        "home": 5.5,
+        "draw": 4.75,
+        "away": 1.5
+      }
+    },
+    {
+      "source": "Football-Data.co.uk",
+      "season": "2627",
+      "league": "D1",
+      "date": "21/11/2026",
+      "home": "Schalke 04",
+      "away": "Stuttgart",
+      "home_goals": 0.0,
+      "away_goals": 0.0,
+      "result": "D",
+      "odds": {
+        "home": 4.1,
+        "draw": 4.0,
+        "away": 1.8
+      }
+    },
+    {
+      "source": "Football-Data.co.uk",
+      "season": "2627",
+      "league": "D1",
+      "date": "22/11/2026",
+      "home": "Augsburg",
+      "away": "Mainz",
+      "home_goals": 3.0,
+      "away_goals": 1.0,
+      "result": "H",
+      "odds": {
+        "home": 2.7,
+        "draw": 3.8,
+        "away": 2.38
+      }
+    },
+    {
+      "source": "Football-Data.co.uk",
+      "season": "2627",
+      "league": "D1",
+      "date": "22/11/2026",
+      "home": "Werder Bremen",
+      "away": "Hamburg",
+      "home_goals": 4.0,
+      "away_goals": 0.0,
+      "result": "H",
+      "odds": {
+        "home": 1.67,
+        "draw": 4.2,
+        "away": 4.5
       }
     },
     {
@@ -263391,6 +264047,166 @@
     {
       "source": "Football-Data.co.uk",
       "season": "2627",
+      "league": "I1",
+      "date": "21/11/2026",
+      "home": "Como",
+      "away": "Cagliari",
+      "home_goals": 2.0,
+      "away_goals": 0.0,
+      "result": "H",
+      "odds": {
+        "home": 1.27,
+        "draw": 6.0,
+        "away": 10.0
+      }
+    },
+    {
+      "source": "Football-Data.co.uk",
+      "season": "2627",
+      "league": "I1",
+      "date": "21/11/2026",
+      "home": "Lazio",
+      "away": "Lecce",
+      "home_goals": 3.0,
+      "away_goals": 0.0,
+      "result": "H",
+      "odds": {
+        "home": 1.36,
+        "draw": 5.25,
+        "away": 8.0
+      }
+    },
+    {
+      "source": "Football-Data.co.uk",
+      "season": "2627",
+      "league": "I1",
+      "date": "21/11/2026",
+      "home": "Parma",
+      "away": "Roma",
+      "home_goals": 1.0,
+      "away_goals": 5.0,
+      "result": "A",
+      "odds": {
+        "home": 10.0,
+        "draw": 5.5,
+        "away": 1.27
+      }
+    },
+    {
+      "source": "Football-Data.co.uk",
+      "season": "2627",
+      "league": "I1",
+      "date": "21/11/2026",
+      "home": "Napoli",
+      "away": "Torino",
+      "home_goals": 1.0,
+      "away_goals": 0.0,
+      "result": "H",
+      "odds": {
+        "home": 1.48,
+        "draw": 4.5,
+        "away": 6.5
+      }
+    },
+    {
+      "source": "Football-Data.co.uk",
+      "season": "2627",
+      "league": "I1",
+      "date": "22/11/2026",
+      "home": "Juventus",
+      "away": "Venezia",
+      "home_goals": 4.0,
+      "away_goals": 0.0,
+      "result": "H",
+      "odds": {
+        "home": 1.36,
+        "draw": 5.25,
+        "away": 8.5
+      }
+    },
+    {
+      "source": "Football-Data.co.uk",
+      "season": "2627",
+      "league": "I1",
+      "date": "22/11/2026",
+      "home": "Bologna",
+      "away": "Udinese",
+      "home_goals": 1.0,
+      "away_goals": 1.0,
+      "result": "D",
+      "odds": {
+        "home": 1.7,
+        "draw": 3.75,
+        "away": 5.0
+      }
+    },
+    {
+      "source": "Football-Data.co.uk",
+      "season": "2627",
+      "league": "I1",
+      "date": "22/11/2026",
+      "home": "Sassuolo",
+      "away": "Genoa",
+      "home_goals": 0.0,
+      "away_goals": 2.0,
+      "result": "A",
+      "odds": {
+        "home": 2.7,
+        "draw": 3.3,
+        "away": 2.45
+      }
+    },
+    {
+      "source": "Football-Data.co.uk",
+      "season": "2627",
+      "league": "I1",
+      "date": "22/11/2026",
+      "home": "Milan",
+      "away": "Frosinone",
+      "home_goals": 5.0,
+      "away_goals": 1.0,
+      "result": "H",
+      "odds": {
+        "home": 1.53,
+        "draw": 4.5,
+        "away": 5.25
+      }
+    },
+    {
+      "source": "Football-Data.co.uk",
+      "season": "2627",
+      "league": "I1",
+      "date": "22/11/2026",
+      "home": "Atalanta",
+      "away": "Inter",
+      "home_goals": 4.0,
+      "away_goals": 4.0,
+      "result": "D",
+      "odds": {
+        "home": 5.0,
+        "draw": 4.33,
+        "away": 1.6
+      }
+    },
+    {
+      "source": "Football-Data.co.uk",
+      "season": "2627",
+      "league": "I1",
+      "date": "23/11/2026",
+      "home": "Monza",
+      "away": "Fiorentina",
+      "home_goals": 3.0,
+      "away_goals": 0.0,
+      "result": "H",
+      "odds": {
+        "home": 3.75,
+        "draw": 3.8,
+        "away": 1.91
+      }
+    },
+    {
+      "source": "Football-Data.co.uk",
+      "season": "2627",
       "league": "F1",
       "date": "21/08/2026",
       "home": "Marseille",
@@ -264826,6 +265642,150 @@
         "home": 2.3,
         "draw": 3.9,
         "away": 2.8
+      }
+    },
+    {
+      "source": "Football-Data.co.uk",
+      "season": "2627",
+      "league": "F1",
+      "date": "20/11/2026",
+      "home": "Troyes",
+      "away": "Le Havre",
+      "home_goals": 3.0,
+      "away_goals": 1.0,
+      "result": "H",
+      "odds": {
+        "home": 2.2,
+        "draw": 3.4,
+        "away": 3.2
+      }
+    },
+    {
+      "source": "Football-Data.co.uk",
+      "season": "2627",
+      "league": "F1",
+      "date": "21/11/2026",
+      "home": "Nice",
+      "away": "Paris SG",
+      "home_goals": 2.0,
+      "away_goals": 3.0,
+      "result": "A",
+      "odds": {
+        "home": 6.0,
+        "draw": 5.0,
+        "away": 1.45
+      }
+    },
+    {
+      "source": "Football-Data.co.uk",
+      "season": "2627",
+      "league": "F1",
+      "date": "21/11/2026",
+      "home": "Lens",
+      "away": "Toulouse",
+      "home_goals": 1.0,
+      "away_goals": 1.0,
+      "result": "D",
+      "odds": {
+        "home": 1.85,
+        "draw": 3.9,
+        "away": 3.8
+      }
+    },
+    {
+      "source": "Football-Data.co.uk",
+      "season": "2627",
+      "league": "F1",
+      "date": "21/11/2026",
+      "home": "Lille",
+      "away": "Lyon",
+      "home_goals": 0.0,
+      "away_goals": 1.0,
+      "result": "A",
+      "odds": {
+        "home": 2.25,
+        "draw": 3.3,
+        "away": 3.3
+      }
+    },
+    {
+      "source": "Football-Data.co.uk",
+      "season": "2627",
+      "league": "F1",
+      "date": "21/11/2026",
+      "home": "Monaco",
+      "away": "Auxerre",
+      "home_goals": 1.0,
+      "away_goals": 1.0,
+      "result": "D",
+      "odds": {
+        "home": 1.42,
+        "draw": 5.0,
+        "away": 7.0
+      }
+    },
+    {
+      "source": "Football-Data.co.uk",
+      "season": "2627",
+      "league": "F1",
+      "date": "21/11/2026",
+      "home": "Strasbourg",
+      "away": "Brest",
+      "home_goals": 0.0,
+      "away_goals": 1.0,
+      "result": "A",
+      "odds": {
+        "home": 2.2,
+        "draw": 3.8,
+        "away": 3.0
+      }
+    },
+    {
+      "source": "Football-Data.co.uk",
+      "season": "2627",
+      "league": "F1",
+      "date": "22/11/2026",
+      "home": "Paris FC",
+      "away": "Angers",
+      "home_goals": 4.0,
+      "away_goals": 0.0,
+      "result": "H",
+      "odds": {
+        "home": 1.33,
+        "draw": 5.5,
+        "away": 8.5
+      }
+    },
+    {
+      "source": "Football-Data.co.uk",
+      "season": "2627",
+      "league": "F1",
+      "date": "22/11/2026",
+      "home": "Lorient",
+      "away": "Rennes",
+      "home_goals": 1.0,
+      "away_goals": 1.0,
+      "result": "D",
+      "odds": {
+        "home": 2.8,
+        "draw": 3.5,
+        "away": 2.45
+      }
+    },
+    {
+      "source": "Football-Data.co.uk",
+      "season": "2627",
+      "league": "F1",
+      "date": "22/11/2026",
+      "home": "Marseille",
+      "away": "Le Mans",
+      "home_goals": 2.0,
+      "away_goals": 3.0,
+      "result": "A",
+      "odds": {
+        "home": 1.44,
+        "draw": 4.75,
+        "away": 6.5
       }
     },
     {
@@ -266554,6 +267514,150 @@
         "home": 2.45,
         "draw": 3.8,
         "away": 2.63
+      }
+    },
+    {
+      "source": "Football-Data.co.uk",
+      "season": "2627",
+      "league": "N1",
+      "date": "21/11/2026",
+      "home": "Nijmegen",
+      "away": "PSV Eindhoven",
+      "home_goals": 1.0,
+      "away_goals": 4.0,
+      "result": "A",
+      "odds": {
+        "home": 4.0,
+        "draw": 4.33,
+        "away": 1.73
+      }
+    },
+    {
+      "source": "Football-Data.co.uk",
+      "season": "2627",
+      "league": "N1",
+      "date": "21/11/2026",
+      "home": "Feyenoord",
+      "away": "Excelsior",
+      "home_goals": 2.0,
+      "away_goals": 3.0,
+      "result": "A",
+      "odds": {
+        "home": 1.2,
+        "draw": 7.5,
+        "away": 10.0
+      }
+    },
+    {
+      "source": "Football-Data.co.uk",
+      "season": "2627",
+      "league": "N1",
+      "date": "21/11/2026",
+      "home": "Utrecht",
+      "away": "Cambuur",
+      "home_goals": 2.0,
+      "away_goals": 3.0,
+      "result": "A",
+      "odds": {
+        "home": 1.91,
+        "draw": 4.0,
+        "away": 3.5
+      }
+    },
+    {
+      "source": "Football-Data.co.uk",
+      "season": "2627",
+      "league": "N1",
+      "date": "21/11/2026",
+      "home": "Groningen",
+      "away": "Heerenveen",
+      "home_goals": 1.0,
+      "away_goals": 3.0,
+      "result": "A",
+      "odds": {
+        "home": 2.5,
+        "draw": 3.6,
+        "away": 2.63
+      }
+    },
+    {
+      "source": "Football-Data.co.uk",
+      "season": "2627",
+      "league": "N1",
+      "date": "21/11/2026",
+      "home": "Telstar",
+      "away": "Zwolle",
+      "home_goals": 1.0,
+      "away_goals": 3.0,
+      "result": "A",
+      "odds": {
+        "home": 2.1,
+        "draw": 3.5,
+        "away": 3.4
+      }
+    },
+    {
+      "source": "Football-Data.co.uk",
+      "season": "2627",
+      "league": "N1",
+      "date": "22/11/2026",
+      "home": "Twente",
+      "away": "Willem II",
+      "home_goals": 2.0,
+      "away_goals": 1.0,
+      "result": "H",
+      "odds": {
+        "home": 1.1,
+        "draw": 10.0,
+        "away": 21.0
+      }
+    },
+    {
+      "source": "Football-Data.co.uk",
+      "season": "2627",
+      "league": "N1",
+      "date": "22/11/2026",
+      "home": "Ajax",
+      "away": "Den Haag",
+      "home_goals": 3.0,
+      "away_goals": 0.0,
+      "result": "H",
+      "odds": {
+        "home": 1.18,
+        "draw": 7.0,
+        "away": 13.0
+      }
+    },
+    {
+      "source": "Football-Data.co.uk",
+      "season": "2627",
+      "league": "N1",
+      "date": "22/11/2026",
+      "home": "Sparta Rotterdam",
+      "away": "AZ Alkmaar",
+      "home_goals": 1.0,
+      "away_goals": 5.0,
+      "result": "A",
+      "odds": {
+        "home": 4.33,
+        "draw": 4.0,
+        "away": 1.73
+      }
+    },
+    {
+      "source": "Football-Data.co.uk",
+      "season": "2627",
+      "league": "N1",
+      "date": "22/11/2026",
+      "home": "Go Ahead Eagles",
+      "away": "For Sittard",
+      "home_goals": 0.0,
+      "away_goals": 1.0,
+      "result": "A",
+      "odds": {
+        "home": 1.62,
+        "draw": 4.2,
+        "away": 5.0
       }
     },
     {
@@ -269322,6 +270426,102 @@
         "home": 1.13,
         "draw": 8.0,
         "away": 12.0
+      }
+    },
+    {
+      "source": "Football-Data.co.uk",
+      "season": "2627",
+      "league": "SC0",
+      "date": "21/11/2026",
+      "home": "Celtic",
+      "away": "St Mirren",
+      "home_goals": 4.0,
+      "away_goals": 1.0,
+      "result": "H",
+      "odds": {
+        "home": 1.17,
+        "draw": 8.0,
+        "away": 12.0
+      }
+    },
+    {
+      "source": "Football-Data.co.uk",
+      "season": "2627",
+      "league": "SC0",
+      "date": "21/11/2026",
+      "home": "Falkirk",
+      "away": "St Johnstone",
+      "home_goals": 2.0,
+      "away_goals": 1.0,
+      "result": "H",
+      "odds": {
+        "home": 1.8,
+        "draw": 3.9,
+        "away": 4.0
+      }
+    },
+    {
+      "source": "Football-Data.co.uk",
+      "season": "2627",
+      "league": "SC0",
+      "date": "21/11/2026",
+      "home": "Hibernian",
+      "away": "Dundee United",
+      "home_goals": 0.0,
+      "away_goals": 4.0,
+      "result": "A",
+      "odds": {
+        "home": 1.95,
+        "draw": 4.0,
+        "away": 3.3
+      }
+    },
+    {
+      "source": "Football-Data.co.uk",
+      "season": "2627",
+      "league": "SC0",
+      "date": "21/11/2026",
+      "home": "Kilmarnock",
+      "away": "Aberdeen",
+      "home_goals": 2.0,
+      "away_goals": 4.0,
+      "result": "A",
+      "odds": {
+        "home": 2.63,
+        "draw": 3.5,
+        "away": 2.5
+      }
+    },
+    {
+      "source": "Football-Data.co.uk",
+      "season": "2627",
+      "league": "SC0",
+      "date": "21/11/2026",
+      "home": "Dundee",
+      "away": "Hearts",
+      "home_goals": 0.0,
+      "away_goals": 8.0,
+      "result": "A",
+      "odds": {
+        "home": 3.2,
+        "draw": 3.9,
+        "away": 2.05
+      }
+    },
+    {
+      "source": "Football-Data.co.uk",
+      "season": "2627",
+      "league": "SC0",
+      "date": "21/11/2026",
+      "home": "Motherwell",
+      "away": "Rangers",
+      "home_goals": 1.0,
+      "away_goals": 2.0,
+      "result": "A",
+      "odds": {
+        "home": 5.5,
+        "draw": 4.33,
+        "away": 1.53
       }
     }
   ]
